@@ -168,11 +168,23 @@
             position: relative;
             overflow: hidden;
             background: #fff;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
         
         .element:active {
             transform: scale(0.95);
+        }
+        
+        .element.highlighted {
+            box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5);
+            z-index: 10;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5); }
+            50% { box-shadow: 0 0 0 5px #ff5252, 0 0 15px 8px rgba(255, 82, 82, 0.7); }
+            100% { box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5); }
         }
         
         .element .number {
@@ -407,10 +419,16 @@
             padding: 8px;
             border-radius: 6px;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
         
         .legend-item:hover {
             background-color: #f5f5f5;
+        }
+        
+        .legend-item.active {
+            background-color: #e3f2fd;
+            font-weight: bold;
         }
         
         .legend-color {
@@ -593,8 +611,12 @@
     <div id="splash-screen">
         <h1>Tabela Periódica ⚛️</h1>
         <p>Sugestões? Dicas de melhorias? Deixe seu feedback!</p>
-        <p>QUI 2025/02 v0.1</p>
         <button id="enter-button">Explorar Tabela</button>
+        <br>
+        <br>
+        <p>QUI 2025/02N v0.1</p>
+
+
     </div>
     
     <div class="container" id="main-container">
@@ -711,44 +733,44 @@
                         <h2>Categorias dos Elementos</h2>
                     </div>
                 </div>
-                <div class="legend-items">
-                    <div class="legend-item">
+                <div class="legend-items" id="legend-items-container">
+                    <div class="legend-item" data-category="alkali-metal">
                         <div class="legend-color alkali-metal"></div>
                         <span>Metais Alcalinos</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="alkaline-earth-metal">
                         <div class="legend-color alkaline-earth-metal"></div>
                         <span>Alcalino-terrosos</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="transition-metal">
                         <div class="legend-color transition-metal"></div>
                         <span>Metais de Transição</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="post-transition-metal">
                         <div class="legend-color post-transition-metal"></div>
                         <span>Metais Pós-transição</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="metalloid">
                         <div class="legend-color metalloid"></div>
                         <span>Metaloides</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="nonmetal">
                         <div class="legend-color nonmetal"></div>
                         <span>Não Metais</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="halogen">
                         <div class="legend-color halogen"></div>
                         <span>Halogênios</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="noble-gas">
                         <div class="legend-color noble-gas"></div>
                         <span>Gases Nobres</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="lanthanide">
                         <div class="legend-color lanthanide"></div>
                         <span>Lantanídeos</span>
                     </div>
-                    <div class="legend-item">
+                    <div class="legend-item" data-category="actinide">
                         <div class="legend-color actinide"></div>
                         <span>Actinídeos</span>
                     </div>
@@ -757,7 +779,6 @@
         </div>
     </div>
     
-    <!-- Controles de Zoom -->
     <div class="zoom-controls" id="zoom-controls" style="display: none;">
         <button class="zoom-btn" id="zoom-in">+</button>
         <button class="zoom-btn zoom-reset" id="zoom-reset">⟳</button>
@@ -768,6 +789,8 @@
     <button class="exit-fullscreen" id="exit-fullscreen">✕</button>
 
     <script>
+
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Elementos da UI
             const splashScreen = document.getElementById('splash-screen');
@@ -787,12 +810,15 @@
             const zoomOutBtn = document.getElementById('zoom-out');
             const zoomResetBtn = document.getElementById('zoom-reset');
             const zoomLevel = document.getElementById('zoom-level');
+            const legendItems = document.querySelectorAll('.legend-item[data-category]');
             
             let isLandscapeMode = false;
             let isFullscreen = false;
             let scale = 1;
             let lastScale = 1;
             let initialDistance = null;
+            let currentHighlightedCategory = null;
+            let highlightTimeout = null;
             
             initializeApp();
             
@@ -809,7 +835,13 @@
                 zoomOutBtn.addEventListener('click', zoomOut);
                 zoomResetBtn.addEventListener('click', resetZoom);
                 
-                // Eventos de gestos para zoom
+                legendItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const category = this.getAttribute('data-category');
+                        highlightCategory(category);
+                    });
+                });
+                
                 tableContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
                 tableContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
                 tableContainer.addEventListener('touchend', handleTouchEnd);
@@ -990,6 +1022,7 @@
                         
                         if (element) {
                             elementDiv.className = `element ${element.category}`;
+                            elementDiv.setAttribute('data-category', element.category);
                             elementDiv.innerHTML = `
                                 <div class="number">${element.number}</div>
                                 <div class="symbol">${element.symbol}</div>
@@ -1062,6 +1095,50 @@
                     legendModal.style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }, 300);
+                
+                // Remover destaque ao fechar o modal
+                clearTimeout(highlightTimeout);
+                highlightTimeout = setTimeout(() => {
+                    removeHighlight();
+                }, 2000);
+            }
+            
+            // Função para destacar elementos de uma categoria
+            function highlightCategory(category) {
+                // Remover destaque anterior
+                removeHighlight();
+                
+                legendItems.forEach(item => {
+                    if (item.getAttribute('data-category') === category) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                const elements = document.querySelectorAll(`.element[data-category="${category}"]`);
+                elements.forEach(element => {
+                    element.classList.add('highlighted');
+                });
+                
+                if (elements.length > 0) {
+                    elements[0].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
+                }
+                
+                currentHighlightedCategory = category;
+            }
+            
+            function removeHighlight() {
+                const highlightedElements = document.querySelectorAll('.element.highlighted');
+                highlightedElements.forEach(element => {
+                    element.classList.remove('highlighted');
+                });
+                
+                legendItems.forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                currentHighlightedCategory = null;
             }
             
             window.addEventListener('orientationchange', function() {
@@ -1090,6 +1167,8 @@
                 }
             }
         });
+
+        
     </script>
     <script src="elements-data.js"></script>
 </body>
