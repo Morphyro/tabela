@@ -82,30 +82,6 @@
             flex-direction: column;
         }
         
-        .fullscreen-header {
-            padding: 10px;
-            background: #2c3e50;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        
-        .fullscreen-header h1 {
-            font-size: 1.2rem;
-        }
-        
-        .back-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        
         .periodic-table {
             display: grid;
             grid-template-columns: repeat(18, 1fr);
@@ -145,7 +121,7 @@
             position: absolute;
             top: 2px;
             left: 2px;
-            color: #555;
+            color: #1f1f1f;
         }
         
         .element .symbol {
@@ -157,7 +133,7 @@
         
         .element .name {
             font-size: 0.5rem;
-            color: #555;
+            color: #353535;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
@@ -166,13 +142,12 @@
         
         .element .mass {
             font-size: 0.5rem;
-            color: #777;
+            color: #1f1f1f;
             position: absolute;
             bottom: 1px;
             right: 2px;
         }
         
-        /* Cores por categoria otimizadas */
         .alkali-metal { background-color: #f1b200; }
         .alkaline-earth-metal { background-color: #eada00; }
         .transition-metal { background-color: #eb8e8e; }
@@ -319,40 +294,78 @@
             max-width: 60%;
         }
         
-        /* Legenda compacta */
+        /* Legenda compacta melhorada */
         .legend {
             background: white;
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 15px;
             margin: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .legend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
         
         .legend h3 {
-            margin-bottom: 10px;
-            font-size: 1rem;
-            text-align: center;
-            color: #333;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+        
+        .back-button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-button:active {
+            transform: scale(0.95);
         }
         
         .legend-items {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            font-size: 0.7rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            font-size: 0.75rem;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            padding: 6px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            transition: background 0.2s;
+        }
+        
+        .legend-item:active {
+            background: #e9ecef;
         }
         
         .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
             border: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .legend-item span {
+            color: #495057;
+            font-weight: 500;
         }
         
         @media (max-width: 480px) {
@@ -388,8 +401,22 @@
             .modal-symbol .symbol {
                 font-size: 1.8rem;
             }
+            
+            .legend-items {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .legend-item {
+                padding: 5px;
+            }
+            
+            .legend-item span {
+                font-size: 0.7rem;
+            }
         }
         
+        /* Modo paisagem forçado - corrigido para modal */
         @media screen and (orientation: portrait) {
             .container.landscape-mode {
                 transform: rotate(90deg);
@@ -401,6 +428,26 @@
                 left: 50%;
                 margin-top: -50vw;
                 margin-left: -50vh;
+            }
+            
+            .container.landscape-mode .modal {
+                transform: rotate(-90deg);
+                transform-origin: center center;
+                width: 100vh;
+                height: 100vw;
+                top: 50%;
+                left: 50%;
+                margin-top: -50vw;
+                margin-left: -50vh;
+            }
+            
+            .container.landscape-mode .modal-content {
+                transform: translateY(20px) rotate(-90deg);
+                margin: 5% auto;
+            }
+            
+            .container.landscape-mode .modal.show .modal-content {
+                transform: translateY(0) rotate(-90deg);
             }
         }
         
@@ -439,17 +486,16 @@
     </div>
     
     <div class="container" id="main-container">
-        <div class="fullscreen-header">
-            <button class="back-button" id="back-button">← Voltar</button>
-            <h1>Tabela Periódica</h1>
-            <div style="width: 60px;"></div> 
-        </div>
-        
         <div class="periodic-table" id="periodicTable">
         </div>
         
         <div class="legend">
-            <h3>Categorias</h3>
+            <div class="legend-header">
+                <h3>Categorias</h3>
+                <button class="back-button" id="back-button">
+                    <span>←</span> Voltar
+                </button>
+            </div>
             <div class="legend-items">
                 <div class="legend-item">
                     <div class="legend-color alkali-metal"></div>
@@ -461,11 +507,11 @@
                 </div>
                 <div class="legend-item">
                     <div class="legend-color transition-metal"></div>
-                    <span>Transição</span>
+                    <span>Metais de Transição</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color post-transition-metal"></div>
-                    <span>Pós-transição</span>
+                    <span>Metais Pós-transição</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color metalloid"></div>
@@ -614,10 +660,16 @@
             const elem = document.documentElement;
             
             if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.requestFullscreen().catch(err => {
+                    console.error('Erro ao ativar fullscreen:', err);
+                    // Fallback para nosso método customizado
+                    document.body.classList.add('fullscreen-mode');
+                    exitFullscreenBtn.style.display = 'block';
+                    isFullscreen = true;
+                });
+            } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
+            } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
             }
             
@@ -629,9 +681,9 @@
         function exitFullscreen() {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) { /* Safari */
+            } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE11 */
+            } else if (document.msExitFullscreen) {
                 document.msExitFullscreen();
             }
             
@@ -709,7 +761,7 @@
             document.getElementById('modalNumber').textContent = element.number;
             document.getElementById('modalMass').textContent = element.mass;
             document.getElementById('modalName').textContent = element.name;
-            document.getElementById('modalFullNumber').textContent = `Número Atômico: ${element.number}`;
+            document.getElementById('modalFullNumber').textContent = `(Z) Número Atômico: ${element.number}`;
             document.getElementById('modalCategory').textContent = categoryNames[element.category];
             document.getElementById('modalConfig').textContent = element.config;
             document.getElementById('modalState').textContent = element.state;
@@ -780,6 +832,6 @@
     });
     </script>
     
-    <script src="elements-data.js"></script>
+ <script src="elements-data.js"></script>
 </body>
 </html>
