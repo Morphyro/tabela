@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tabela Periódica QUI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            overflow: hidden;
+            height: 100vh;
+            touch-action: manipulation;
+        }
+        
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        #splash-screen h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        #splash-screen p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: rgba(255,255,255,0.9);
+            max-width: 90%;
+        }
+        
+        #enter-button {
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        #enter-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            overflow: auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #f0f0f0;
+            flex-direction: column;
+        }
+        
+        .fullscreen-header {
+            padding: 10px;
+            background: #2c3e50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .fullscreen-header h1 {
+            font-size: 1.2rem;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .periodic-table {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 2px;
+            padding: 10px;
+            width: max-content;
+            min-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .element {
+            aspect-ratio: 1;
+            min-width: 35px;
+            min-height: 35px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.2s ease;
+        }
+        
+        .element:active {
+            transform: scale(0.95);
+        }
+        
+        .element .number {
+            font-size: 0.6rem;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            color: #555;
+        }
+        
+        .element .symbol {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 2px 0;
+            color: #222;
+        }
+        
+        .element .name {
+            font-size: 0.5rem;
+            color: #555;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+        
+        .element .mass {
+            font-size: 0.5rem;
+            color: #777;
+            position: absolute;
+            bottom: 1px;
+            right: 2px;
+        }
+        
+        /* Cores por categoria otimizadas */
+        .alkali-metal { background-color: #f1b200; }
+        .alkaline-earth-metal { background-color: #eada00; }
+        .transition-metal { background-color: #eb8e8e; }
+        .post-transition-metal { background-color: #a2c7d3; }
+        .metalloid { background-color: #4db6ac; }
+        .nonmetal { background-color: #a1d344; }
+        .halogen { background-color: #70cbeb; }
+        .noble-gas { background-color: #74b9ff; }
+        .lanthanide { background-color: #90e3e9; }
+        .actinide { background-color: #dcadd6; }
+        
+        .empty-space {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.show {
+            opacity: 1;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #777;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .modal-header {
+            padding: 20px 20px 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-symbol {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .modal-symbol .symbol {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+        
+        .modal-symbol .number {
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .modal-symbol .mass {
+            position: absolute;
+            bottom: 5px;
+            right: 8px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        
+        .modal-title {
+            flex: 1;
+        }
+        
+        .modal-title h2 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .modal-title .number {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .modal-properties {
+            padding: 15px 20px 20px;
+        }
+        
+        .property {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .property:last-child {
+            border-bottom: none;
+        }
+        
+        .property strong {
+            color: #555;
+            font-weight: 600;
+        }
+        
+        .property span {
+            color: #222;
+            text-align: right;
+            max-width: 60%;
+        }
+        
+        /* Legenda compacta */
+        .legend {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .legend h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            text-align: center;
+            color: #333;
+        }
+        
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            font-size: 0.7rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 480px) {
+            .element {
+                min-width: 30px;
+                min-height: 30px;
+                font-size: 0.6rem;
+            }
+            
+            .element .symbol {
+                font-size: 0.8rem;
+            }
+            
+            .element .name {
+                font-size: 0.45rem;
+            }
+            
+            .element .number,
+            .element .mass {
+                font-size: 0.45rem;
+            }
+            
+            .modal-content {
+                margin: 5% auto;
+                width: 95%;
+            }
+            
+            .modal-symbol {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .modal-symbol .symbol {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media screen and (orientation: portrait) {
+            .container.landscape-mode {
+                transform: rotate(90deg);
+                transform-origin: center center;
+                width: 100vh;
+                height: 100vw;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                margin-top: -50vw;
+                margin-left: -50vh;
+            }
+        }
+        
+        .fullscreen-mode {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: white;
+        }
+        
+        .exit-fullscreen {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 10000;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <h1>Tabela Periódica ⚛️</h1>
+        <p>Sugestões? Dicas de melhorias? Deixe seu feedback!</p>
+        <button id="enter-button">Explorar Tabela</button>
+    </div>
+    
+    <div class="container" id="main-container">
+        <div class="fullscreen-header">
+            <button class="back-button" id="back-button">← Voltar</button>
+            <h1>Tabela Periódica</h1>
+            <div style="width: 60px;"></div> 
+        </div>
+        
+        <div class="periodic-table" id="periodicTable">
+        </div>
+        
+        <div class="legend">
+            <h3>Categorias</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color alkali-metal"></div>
+                    <span>Metais Alcalinos</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color alkaline-earth-metal"></div>
+                    <span>Alcalino-terrosos</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color transition-metal"></div>
+                    <span>Transição</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color post-transition-metal"></div>
+                    <span>Pós-transição</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color metalloid"></div>
+                    <span>Metaloides</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color nonmetal"></div>
+                    <span>Não Metais</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color halogen"></div>
+                    <span>Halogênios</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color noble-gas"></div>
+                    <span>Gases Nobres</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color lanthanide"></div>
+                    <span>Lantanídeos</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color actinide"></div>
+                    <span>Actinídeos</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal" id="elementModal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <div class="modal-symbol" id="modalSymbol">
+                        <div class="number" id="modalNumber">1</div>
+                        <div class="symbol" id="modalSymbolText">H</div>
+                        <div class="mass" id="modalMass">1.008</div>
+                    </div>
+                    <div class="modal-title">
+                        <h2 id="modalName">Hidrogênio</h2>
+                        <div class="number" id="modalFullNumber">Número Atômico: 1</div>
+                    </div>
+                </div>
+                <div class="modal-properties">
+                    <div class="property">
+                        <strong>Categoria:</strong>
+                        <span id="modalCategory">Não metal</span>
+                    </div>
+                    <div class="property">
+                        <strong>Configuração Eletrônica:</strong>
+                        <span id="modalConfig">1s¹</span>
+                    </div>
+                    <div class="property">
+                        <strong>Estado (25°C):</strong>
+                        <span id="modalState">Gás</span>
+                    </div>
+                    <div class="property">
+                        <strong>Densidade:</strong>
+                        <span id="modalDensity">0.08988 g/L</span>
+                    </div>
+                    <div class="property">
+                        <strong>Ponto de Fusão:</strong>
+                        <span id="modalMelting">-259.14°C</span>
+                    </div>
+                    <div class="property">
+                        <strong>Ponto de Ebulição:</strong>
+                        <span id="modalBoiling">-252.87°C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="exit-fullscreen" id="exit-fullscreen">✕</button>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elementos da UI
+        const splashScreen = document.getElementById('splash-screen');
+        const enterButton = document.getElementById('enter-button');
+        const mainContainer = document.getElementById('main-container');
+        const backButton = document.getElementById('back-button');
+        const periodicTable = document.getElementById('periodicTable');
+        const modal = document.getElementById('elementModal');
+        const closeBtn = document.querySelector('.close');
+        const exitFullscreenBtn = document.getElementById('exit-fullscreen');
+        
+        let isLandscapeMode = false;
+        let isFullscreen = false;
+        
+        initializeApp();
+        
+        function initializeApp() {
+            enterButton.addEventListener('click', enterTable);
+            backButton.addEventListener('click', exitTable);
+            closeBtn.addEventListener('click', closeModal);
+            exitFullscreenBtn.addEventListener('click', exitFullscreen);
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (isFullscreen) {
+                        exitFullscreen();
+                    } else {
+                        closeModal();
+                    }
+                }
+            });
+            
+            setTimeout(createPeriodicTable, 100);
+        }
+        
+        function enterTable() {
+            splashScreen.style.opacity = '0';
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+                
+                mainContainer.style.display = 'flex';
+                
+                activateFullscreen();
+                
+                if (window.innerHeight > window.innerWidth) {
+                    enableLandscapeMode();
+                }
+            }, 500);
+        }
+        
+        function exitTable() {
+            exitFullscreen();
+            
+            mainContainer.style.display = 'none';
+            
+            if (isLandscapeMode) {
+                disableLandscapeMode();
+            }
+            
+            splashScreen.style.display = 'flex';
+            setTimeout(() => {
+                splashScreen.style.opacity = '1';
+            }, 50);
+        }
+        
+        function activateFullscreen() {
+            const elem = document.documentElement;
+            
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+            
+            document.body.classList.add('fullscreen-mode');
+            exitFullscreenBtn.style.display = 'block';
+            isFullscreen = true;
+        }
+        
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+            
+            document.body.classList.remove('fullscreen-mode');
+            exitFullscreenBtn.style.display = 'none';
+            isFullscreen = false;
+        }
+        
+        function enableLandscapeMode() {
+            if (window.innerHeight > window.innerWidth) {
+                mainContainer.classList.add('landscape-mode');
+                isLandscapeMode = true;
+                
+                setTimeout(() => {
+                    periodicTable.scrollIntoView({behavior: 'smooth'});
+                }, 300);
+            }
+        }
+        
+        function disableLandscapeMode() {
+            mainContainer.classList.remove('landscape-mode');
+            isLandscapeMode = false;
+        }
+        
+        function createPeriodicTable() {
+            periodicTable.innerHTML = '';
+            
+            const grid = Array(9).fill().map(() => Array(18).fill(null));
+            
+            elementsData.forEach(element => {
+                if (element.row && element.col) {
+                    grid[element.row - 1][element.col - 1] = element;
+                }
+            });
+            
+            const fragment = document.createDocumentFragment();
+            
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 18; col++) {
+                    const element = grid[row][col];
+                    const elementDiv = document.createElement('div');
+                    
+                    if (element) {
+                        elementDiv.className = `element ${element.category}`;
+                        elementDiv.innerHTML = `
+                            <div class="number">${element.number}</div>
+                            <div class="symbol">${element.symbol}</div>
+                            <div class="name">${element.name}</div>
+                            <div class="mass">${element.mass}</div>
+                        `;
+                        
+                        elementDiv.addEventListener('click', () => showElementDetails(element));
+                    } else {
+                        elementDiv.className = 'element empty-space';
+                        
+                        if (row === 5 && col === 2) {
+                            elementDiv.innerHTML = '<div class="symbol">57-71</div><div class="name">Lantanídeos</div>';
+                            elementDiv.className = 'element lanthanide-indicator';
+                        } else if (row === 6 && col === 2) {
+                            elementDiv.innerHTML = '<div class="symbol">89-103</div><div class="name">Actinídeos</div>';
+                            elementDiv.className = 'element actinide-indicator';
+                        }
+                    }
+                    
+                    fragment.appendChild(elementDiv);
+                }
+            }
+            
+            periodicTable.appendChild(fragment);
+        }
+        
+        function showElementDetails(element) {
+            document.getElementById('modalSymbolText').textContent = element.symbol;
+            document.getElementById('modalSymbol').className = `modal-symbol ${element.category}`;
+            document.getElementById('modalNumber').textContent = element.number;
+            document.getElementById('modalMass').textContent = element.mass;
+            document.getElementById('modalName').textContent = element.name;
+            document.getElementById('modalFullNumber').textContent = `Número Atômico: ${element.number}`;
+            document.getElementById('modalCategory').textContent = categoryNames[element.category];
+            document.getElementById('modalConfig').textContent = element.config;
+            document.getElementById('modalState').textContent = element.state;
+            document.getElementById('modalDensity').textContent = element.density;
+            document.getElementById('modalMelting').textContent = element.melting;
+            document.getElementById('modalBoiling').textContent = element.boiling;
+            
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }, 300);
+        }
+        
+        window.addEventListener('orientationchange', function() {
+            if (mainContainer.style.display !== 'none') {
+                if (window.orientation === 90 || window.orientation === -90) {
+                    disableLandscapeMode();
+                } else {
+                    enableLandscapeMode();
+                }
+            }
+        });
+        
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function(e) {
+            e.preventDefault();
+        });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+        
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+        
+        function handleFullscreenChange() {
+            const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            
+            if (!fullscreenElement) {
+                document.body.classList.remove('fullscreen-mode');
+                exitFullscreenBtn.style.display = 'none';
+                isFullscreen = false;
+            }
+        }
+    });
+    </script>
+    
+    <script src="elements-data.js"></script>
+</body>
+</html>
