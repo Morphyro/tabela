@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Tabela Periódica QUI</title>
     <style>
         * {
@@ -87,31 +87,68 @@
             background: #2c3e50;
             color: white;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: -1;
             height: 70px;
         }
         
         .fullscreen-header h1 {
             font-size: 1.4rem;
             text-align: center;
+            flex: 1;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            margin-right: 27%;
+        }
+        
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .header-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
         }
         
         .back-button {
             display: none;
         }
         
+        .table-container {
+            overflow: auto;
+            flex: 1;
+            position: relative;
+            touch-action: manipulation;
+        }
+        
         .periodic-table {
             display: grid;
             grid-template-columns: repeat(18, 1fr);
             gap: 2px;
-            padding-top: 10px;
+            padding: 5px;
+            padding-bottom: 15px;
             width: max-content;
             min-width: 98%;
             margin: 0 auto;
+            transform-origin: 0 0;
+            transition: transform 0.1s ease-out;
         }
         
         .element {
@@ -221,19 +258,20 @@
         /* Modal centralizado em todas as orientações */
         .modal {
             display: none;
-            position:absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100vh;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            z-index: 100;
+            z-index: 9999; /* Aumentado para sobrepor zoom-controls */
             overflow: hidden;
             opacity: 0;
             transition: opacity 0.3s ease;
-        }
-        
-        .modal-content {
+            }
+
+            /* Conteúdo do modal */
+            .modal-content {
             background: white;
             border-radius: 12px;
             width: 90%;
@@ -242,10 +280,12 @@
             position: absolute;
             max-height: 80vh;
             overflow-y: auto;
-            top: 40%;
+            top: 50%;
             left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
             transition: transform 0.3s ease;
-        }
+            z-index: 10000; /* Garantia extra dentro do modal */
+            }
         
         .modal.show {
             opacity: 1;
@@ -348,27 +388,8 @@
             max-width: 60%;
         }
         
-        .legend-container {
-            padding: 10px;
-            background: white;
-            border-top: 1px solid #ddd;
-        }
-        
-        .legend {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 0 auto;
-            max-width: 600px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .legend h3 {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            text-align: center;
-            color: #333;
-            font-weight: 600;
+        .legend-modal .modal-content {
+            max-width: 400px;
         }
         
         .legend-items {
@@ -376,13 +397,14 @@
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
             font-size: 0.75rem;
+            padding: 15px 20px 20px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 5px;
+            padding: 8px;
             border-radius: 6px;
             transition: background-color 0.2s;
         }
@@ -392,8 +414,8 @@
         }
         
         .legend-color {
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             border-radius: 4px;
             border: 1px solid rgba(0,0,0,0.1);
             flex-shrink: 0;
@@ -402,6 +424,59 @@
         .legend-item span {
             font-weight: 500;
             color: #444;
+        }
+        
+        /* Controles de Zoom Melhorados */
+        .zoom-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100; /* Antes estava -1 */
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 25px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            }
+        
+        .zoom-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            font-size: 1.6rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .zoom-btn:active {
+            transform: scale(0.92);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .zoom-reset {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+        
+        .zoom-level {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-top: 5px;
+            background: rgba(236, 240, 241, 0.9);
+            padding: 4px 8px;
+            border-radius: 15px;
         }
         
         @media (max-width: 480px) {
@@ -426,7 +501,6 @@
             
             .modal-content {
                 width: 95%;
-                
             }
             
             .modal-symbol {
@@ -445,6 +519,28 @@
             
             .legend-item span {
                 font-size: 0.7rem;
+            }
+            
+            .zoom-controls {
+                bottom: 15px;
+                right: 3px;
+                margin-right: 3px ;
+                gap: 7px;
+                padding: 2px;
+                padding-top: 10px;
+
+            }
+            
+            .zoom-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.4rem;
+            }
+            
+            .header-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1.1rem;
             }
         }
         
@@ -475,7 +571,7 @@
         .exit-fullscreen {
             position: fixed;
             top: 15px;
-            right: 8px;
+            right: 15px;
             z-index: 10000;
             background: rgba(0,0,0,0.5);
             color: white;
@@ -485,6 +581,10 @@
             height: 40px;
             font-size: 1.2rem;
             cursor: pointer;
+            display: none;
+        }
+        
+        .legend-container {
             display: none;
         }
     </style>
@@ -501,10 +601,14 @@
         <div class="fullscreen-header">
             <button class="back-button" id="back-button">← Voltar</button>
             <h1>Tabela Periódica</h1>
-            <div style="width: 60px;"></div>
+            <div class="header-buttons">
+                <button class="header-btn" id="legend-button">📋</button>
+            </div>
         </div>
         
-        <div class="periodic-table" id="periodicTable">
+        <div class="table-container" id="table-container">
+            <div class="periodic-table" id="periodicTable">
+            </div>
         </div>
         
         <div class="legend-container">
@@ -597,6 +701,68 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Modal para Categorias -->
+        <div class="modal legend-modal" id="legendModal">
+            <div class="modal-content">
+                <span class="close" id="close-legend">&times;</span>
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <h2>Categorias dos Elementos</h2>
+                    </div>
+                </div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color alkali-metal"></div>
+                        <span>Metais Alcalinos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color alkaline-earth-metal"></div>
+                        <span>Alcalino-terrosos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color transition-metal"></div>
+                        <span>Metais de Transição</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color post-transition-metal"></div>
+                        <span>Metais Pós-transição</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color metalloid"></div>
+                        <span>Metaloides</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color nonmetal"></div>
+                        <span>Não Metais</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color halogen"></div>
+                        <span>Halogênios</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color noble-gas"></div>
+                        <span>Gases Nobres</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color lanthanide"></div>
+                        <span>Lantanídeos</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color actinide"></div>
+                        <span>Actinídeos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Controles de Zoom -->
+    <div class="zoom-controls" id="zoom-controls" style="display: none;">
+        <button class="zoom-btn" id="zoom-in">+</button>
+        <button class="zoom-btn zoom-reset" id="zoom-reset">⟳</button>
+        <button class="zoom-btn" id="zoom-out">-</button>
+        <div class="zoom-level" id="zoom-level">100%</div>
     </div>
     
     <button class="exit-fullscreen" id="exit-fullscreen">✕</button>
@@ -609,12 +775,24 @@
             const mainContainer = document.getElementById('main-container');
             const backButton = document.getElementById('back-button');
             const periodicTable = document.getElementById('periodicTable');
+            const tableContainer = document.getElementById('table-container');
             const modal = document.getElementById('elementModal');
+            const legendModal = document.getElementById('legendModal');
+            const legendButton = document.getElementById('legend-button');
             const closeBtn = document.querySelector('.close');
+            const closeLegendBtn = document.getElementById('close-legend');
             const exitFullscreenBtn = document.getElementById('exit-fullscreen');
+            const zoomControls = document.getElementById('zoom-controls');
+            const zoomInBtn = document.getElementById('zoom-in');
+            const zoomOutBtn = document.getElementById('zoom-out');
+            const zoomResetBtn = document.getElementById('zoom-reset');
+            const zoomLevel = document.getElementById('zoom-level');
             
             let isLandscapeMode = false;
             let isFullscreen = false;
+            let scale = 1;
+            let lastScale = 1;
+            let initialDistance = null;
             
             initializeApp();
             
@@ -622,16 +800,34 @@
                 enterButton.addEventListener('click', enterTable);
                 backButton.addEventListener('click', exitTable);
                 closeBtn.addEventListener('click', closeModal);
+                closeLegendBtn.addEventListener('click', closeLegendModal);
                 exitFullscreenBtn.addEventListener('click', exitFullscreen);
+                legendButton.addEventListener('click', showLegendModal);
+                
+                // Eventos de zoom
+                zoomInBtn.addEventListener('click', zoomIn);
+                zoomOutBtn.addEventListener('click', zoomOut);
+                zoomResetBtn.addEventListener('click', resetZoom);
+                
+                // Eventos de gestos para zoom
+                tableContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+                tableContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+                tableContainer.addEventListener('touchend', handleTouchEnd);
                 
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) closeModal();
+                });
+                
+                legendModal.addEventListener('click', function(e) {
+                    if (e.target === legendModal) closeLegendModal();
                 });
                 
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape') {
                         if (isFullscreen) {
                             exitFullscreen();
+                        } else if (legendModal.style.display === 'block') {
+                            closeLegendModal();
                         } else {
                             closeModal();
                         }
@@ -646,6 +842,7 @@
                 setTimeout(() => {
                     splashScreen.style.display = 'none';
                     mainContainer.style.display = 'flex';
+                    zoomControls.style.display = 'flex';
                     activateFullscreen();
                     
                     if (window.innerHeight > window.innerWidth) {
@@ -657,6 +854,7 @@
             function exitTable() {
                 exitFullscreen();
                 mainContainer.style.display = 'none';
+                zoomControls.style.display = 'none';
                 if (isLandscapeMode) {
                     disableLandscapeMode();
                 }
@@ -696,6 +894,7 @@
 
                 // Voltar ao menu inicial
                 mainContainer.style.display = 'none';
+                zoomControls.style.display = 'none';
                 if (isLandscapeMode) disableLandscapeMode();
                 splashScreen.style.display = 'flex';
                 setTimeout(() => { splashScreen.style.opacity = '1'; }, 50);
@@ -715,6 +914,61 @@
             function disableLandscapeMode() {
                 mainContainer.classList.remove('landscape-mode');
                 isLandscapeMode = false;
+            }
+            
+            // Funções de Zoom
+            function zoomIn() {
+                scale = Math.min(scale + 0.1, 2);
+                applyZoom();
+            }
+            
+            function zoomOut() {
+                scale = Math.max(scale - 0.1, 1); // Mínimo de 100% (1.0)
+                applyZoom();
+            }
+            
+            function resetZoom() {
+                scale = 1;
+                applyZoom();
+            }
+            
+            function applyZoom() {
+                periodicTable.style.transform = `scale(${scale})`;
+                zoomLevel.textContent = `${Math.round(scale * 100)}%`;
+                
+                // Desabilitar botão de zoom out se estiver no mínimo (100%)
+                zoomOutBtn.disabled = scale <= 1;
+                zoomOutBtn.style.opacity = scale <= 1 ? 0.5 : 1;
+            }
+            
+            // Gestos para zoom com dois dedos (pinch)
+            function handleTouchStart(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    initialDistance = getDistance(e.touches[0], e.touches[1]);
+                    lastScale = scale;
+                }
+            }
+            
+            function handleTouchMove(e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+                    const currentDistance = getDistance(e.touches[0], e.touches[1]);
+                    if (initialDistance !== null) {
+                        scale = Math.max(1, Math.min(2, lastScale * (currentDistance / initialDistance))); // Mínimo de 100% (1.0)
+                        applyZoom();
+                    }
+                }
+            }
+            
+            function handleTouchEnd() {
+                initialDistance = null;
+            }
+            
+            function getDistance(touch1, touch2) {
+                const dx = touch1.clientX - touch2.clientX;
+                const dy = touch1.clientY - touch2.clientY;
+                return Math.sqrt(dx * dx + dy * dy);
             }
             
             function createPeriodicTable() {
@@ -785,10 +1039,27 @@
                 document.body.style.overflow = 'hidden';
             }
             
+            function showLegendModal() {
+                legendModal.style.display = 'block';
+                setTimeout(() => {
+                    legendModal.classList.add('show');
+                }, 10);
+                
+                document.body.style.overflow = 'hidden';
+            }
+            
             function closeModal() {
                 modal.classList.remove('show');
                 setTimeout(() => {
                     modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+            
+            function closeLegendModal() {
+                legendModal.classList.remove('show');
+                setTimeout(() => {
+                    legendModal.style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }, 300);
             }
@@ -802,27 +1073,6 @@
                     }
                 }
             });
-            
-            document.addEventListener('gesturestart', function(e) {
-                e.preventDefault();
-            });
-            
-            document.addEventListener('gesturechange', function(e) {
-                e.preventDefault();
-            });
-            
-            document.addEventListener('gestureend', function(e) {
-                e.preventDefault();
-            });
-            
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(event) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, { passive: false });
             
             document.addEventListener('fullscreenchange', handleFullscreenChange);
             document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
@@ -841,7 +1091,6 @@
             }
         });
     </script>
-    
     <script src="elements-data.js"></script>
 </body>
 </html>
