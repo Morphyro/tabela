@@ -141,9 +141,9 @@
                     { from: 0, to: 2, type: "single" }
                 ],
                 atoms3d: [
-                    { element: "O", x: 0, y: 0, z: 0, color: 0xFF5733, radius: 0.6 },
-                    { element: "H", x: -0.96, y: -0.26, z: 0, color: 0x3498DB, radius: 0.4 },
-                    { element: "H", x: 0.96, y: -0.26, z: 0, color: 0x3498DB, radius: 0.4 }
+                    { element: "O", x: 0, y: 0, z: 0, color: 0xFF5733, radius: 0.55 },
+                    { element: "H", x: -0.96, y: -0.26, z: 0, color: 0x3498DB, radius: 0.33 },
+                    { element: "H", x: 0.96, y: -0.26, z: 0, color: 0x3498DB, radius: 0.33 }
                 ]
             },
             co2: {
@@ -212,10 +212,10 @@
                     { from: 0, to: 3, type: "single" }
                 ],
                 atoms3d: [
-                    { element: "N", x: 0, y: 0, z: 0, color: 0x2980B9, radius: 0.6 },
-                    { element: "H", x: -0.94, y: -0.33, z: 0, color: 0x3498DB, radius: 0.4 },
-                    { element: "H", x: 0.47, y: -0.33, z: -0.81, color: 0x3498DB, radius: 0.4 },
-                    { element: "H", x: 0.47, y: -0.33, z: 0.81, color: 0x3498DB, radius: 0.4 }
+                    { element: "N", x: 0, y: 0, z: 0, color: 0x2980B9, radius: 0.5 },
+                    { element: "H", x: -0.94, y: -0.33, z: 0, color: 0x3498DB, radius: 0.33 },
+                    { element: "H", x: 0.47, y: -0.33, z: -0.81, color: 0x3498DB, radius: 0.33 },
+                    { element: "H", x: 0.47, y: -0.33, z: 0.81, color: 0x3498DB, radius: 0.33 }
                 ]
             },
             c2h4: {
@@ -286,8 +286,8 @@
                     { from: 0, to: 1, type: "double" }
                 ],
                 atoms3d: [
-                    { element: "O", x: -0.6, y: 0, z: 0, color: 0xFF5733, radius: 0.6 },
-                    { element: "O", x: 0.6, y: 0, z: 0, color: 0xFF5733, radius: 0.6 }
+                    { element: "O", x: -0.6, y: 0, z: 0, color: 0xFF5733, radius: 0.5 },
+                    { element: "O", x: 0.6, y: 0, z: 0, color: 0xFF5733, radius: 0.5 }
                 ]
             },
             n2: {
@@ -304,8 +304,8 @@
                     { from: 0, to: 1, type: "triple" }
                 ],
                 atoms3d: [
-                    { element: "N", x: -0.55, y: 0, z: 0, color: 0x2980B9, radius: 0.6 },
-                    { element: "N", x: 0.55, y: 0, z: 0, color: 0x2980B9, radius: 0.6 }
+                    { element: "N", x: -0.55, y: 0, z: 0, color: 0x2980B9, radius: 0.5 },
+                    { element: "N", x: 0.55, y: 0, z: 0, color: 0x2980B9, radius: 0.5 }
                 ]
             },
             hcl: {
@@ -323,21 +323,18 @@
                 ],
                 atoms3d: [
                     { element: "H", x: -0.6, y: 0, z: 0, color: 0x3498DB, radius: 0.4 },
-                    { element: "Cl", x: 0.6, y: 0, z: 0, color: 0x1D8348, radius: 0.8 }
+                    { element: "Cl", x: 0.6, y: 0, z: 0, color: 0x1D8348, radius: 0.666 }
                 ]
             }
         };
 
-        // Variáveis globais para Three.js
         let scene, camera, renderer, controls, moleculeGroup;
         let autoRotate = true;
 
-        // Inicializa a visualização 2D
         function init2DView(molecule) {
             const container = document.getElementById('molecule-2d');
             container.innerHTML = '';
             
-            // Desenhar ligações primeiro (para ficarem atrás dos átomos)
             molecule.bonds.forEach(bond => {
                 const fromAtom = molecule.atoms[bond.from];
                 const toAtom = molecule.atoms[bond.to];
@@ -345,7 +342,6 @@
                 const bondElement = document.createElement('div');
                 bondElement.className = 'bond';
                 
-                // Calcular comprimento e ângulo da ligação
                 const dx = toAtom.x - fromAtom.x;
                 const dy = toAtom.y - fromAtom.y;
                 const length = Math.sqrt(dx * dx + dy * dy);
@@ -420,112 +416,87 @@
             });
             
             molecule.bonds.forEach(bond => {
-                const fromAtom = molecule.atoms3d[bond.from];
-                const toAtom = molecule.atoms3d[bond.to];
-                
-                const start = new THREE.Vector3(fromAtom.x, fromAtom.y, fromAtom.z);
-                const end = new THREE.Vector3(toAtom.x, toAtom.y, toAtom.z);
-                const direction = new THREE.Vector3().subVectors(end, start);
-                const length = direction.length();
-                
-                const geometry = new THREE.CylinderGeometry(0.1, 0.1, length, 8);
-                geometry.rotateX(Math.PI / 1); // Rotacionar para alinhar com o eixo Y
-                
-                const material = new THREE.MeshPhongMaterial({ 
-                    color: 0x333333,
-                    shininess: 10
-                });
-                
-                if (bond.type === "single") {
-                    const cylinder = new THREE.Mesh(geometry, material);
-                    cylinder.position.x = (start.x + end.x) / 2;
-                    cylinder.position.y = (start.y + end.y) / 2;
-                    cylinder.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    moleculeGroup.add(cylinder);
-                }
-                else if (bond.type === "double") {
-                    const cylinder1 = new THREE.Mesh(geometry, material);
-                    cylinder1.position.x = (start.x + end.x) / 2;
-                    cylinder1.position.y = (start.y + end.y) / 2;
-                    cylinder1.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder1.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    const perpendicular = new THREE.Vector3().crossVectors(
-                        direction,
-                        new THREE.Vector3(0, 1, 0)
-                    ).normalize().multiplyScalar(0.15);
-                    
-                    cylinder1.position.add(perpendicular);
-                    moleculeGroup.add(cylinder1);
-                    
-                    const cylinder2 = new THREE.Mesh(geometry, material);
-                    cylinder2.position.x = (start.x + end.x) / 2;
-                    cylinder2.position.y = (start.y + end.y) / 2;
-                    cylinder2.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder2.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    cylinder2.position.sub(perpendicular);
-                    moleculeGroup.add(cylinder2);
-                }
-                else if (bond.type === "triple") {
-                    const cylinder1 = new THREE.Mesh(geometry, material);
-                    cylinder1.position.x = (start.x + end.x) / 2;
-                    cylinder1.position.y = (start.y + end.y) / 2;
-                    cylinder1.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder1.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    moleculeGroup.add(cylinder1);
-                    
-                    const cylinder2 = new THREE.Mesh(geometry, material);
-                    cylinder2.position.x = (start.x + end.x) / 2;
-                    cylinder2.position.y = (start.y + end.y) / 2;
-                    cylinder2.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder2.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    const perpendicular = new THREE.Vector3().crossVectors(
-                        direction,
-                        new THREE.Vector3(0, 1, 0)
-                    ).normalize().multiplyScalar(0.2);
-                    
-                    cylinder2.position.add(perpendicular);
-                    moleculeGroup.add(cylinder2);
-                    
-                    const cylinder3 = new THREE.Mesh(geometry, material);
-                    cylinder3.position.x = (start.x + end.x) / 2;
-                    cylinder3.position.y = (start.y + end.y) / 2;
-                    cylinder3.position.z = (start.z + end.z) / 2;
-                    
-                    cylinder3.quaternion.setFromUnitVectors(
-                        new THREE.Vector3(0, 1, 0),
-                        new THREE.Vector3().subVectors(end, start).normalize()
-                    );
-                    
-                    cylinder3.position.sub(perpendicular);
-                    moleculeGroup.add(cylinder3);
-                }
-            });
+    const fromAtom = molecule.atoms3d[bond.from];
+    const toAtom = molecule.atoms3d[bond.to];
+    
+    const start = new THREE.Vector3(fromAtom.x, fromAtom.y, fromAtom.z);
+    const end = new THREE.Vector3(toAtom.x, toAtom.y, toAtom.z);
+    const direction = new THREE.Vector3().subVectors(end, start);
+    const length = direction.length();
+
+    let radius = 0.1;
+
+    if (bond.type === "triple") {
+        radius = 0.07; 
+    }
+
+    const geometry = new THREE.CylinderGeometry(radius, radius, length, 16);
+    geometry.rotateX(Math.PI / 1);
+
+    const material = new THREE.MeshPhongMaterial({ 
+        color: 0x333333,
+        shininess: 10
+    });
+
+    if (bond.type === "single") {
+        const cylinder = new THREE.Mesh(geometry, material);
+        cylinder.position.copy(start.clone().add(end).multiplyScalar(0.5));
+        cylinder.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0, 1, 0),
+            direction.clone().normalize()
+        );
+        moleculeGroup.add(cylinder);
+    }
+    else if (bond.type === "double") {
+        const cylinder1 = new THREE.Mesh(geometry, material);
+        cylinder1.position.copy(start.clone().add(end).multiplyScalar(0.5));
+        cylinder1.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0, 1, 0),
+            direction.clone().normalize()
+        );
+        const perpendicular = new THREE.Vector3().crossVectors(
+            direction,
+            new THREE.Vector3(0, 1, 0)
+        ).normalize().multiplyScalar(0.15);
+        cylinder1.position.add(perpendicular);
+        moleculeGroup.add(cylinder1);
+
+        const cylinder2 = new THREE.Mesh(geometry, material);
+        cylinder2.position.copy(start.clone().add(end).multiplyScalar(0.5));
+        cylinder2.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0, 1, 0),
+            direction.clone().normalize()
+        );
+        cylinder2.position.sub(perpendicular);
+        moleculeGroup.add(cylinder2);
+    }
+    else if (bond.type === "triple") {
+        const basePos = start.clone().add(end).multiplyScalar(0.5);
+        const perpendicular = new THREE.Vector3().crossVectors(
+            direction,
+            new THREE.Vector3(0, 1, 0)
+        ).normalize().multiplyScalar(0.2);
+
+        const cylinder1 = new THREE.Mesh(geometry, material);
+        cylinder1.position.copy(basePos);
+        cylinder1.quaternion.setFromUnitVectors(
+            new THREE.Vector3(0, 1, 0),
+            direction.clone().normalize()
+        );
+        moleculeGroup.add(cylinder1);
+
+        const cylinder2 = new THREE.Mesh(geometry, material);
+        cylinder2.position.copy(basePos.clone().add(perpendicular));
+        cylinder2.quaternion.copy(cylinder1.quaternion);
+        moleculeGroup.add(cylinder2);
+
+        const cylinder3 = new THREE.Mesh(geometry, material);
+        cylinder3.position.copy(basePos.clone().sub(perpendicular));
+        cylinder3.quaternion.copy(cylinder1.quaternion);
+        moleculeGroup.add(cylinder3);
+    }
+});
+
             
             moleculeGroup.position.set(0, 0, 0);
         }
