@@ -12,7 +12,16 @@ const elementsData = [
         melting: "-259.14°C",
         boiling: "-252.87°C",
         row: 1,
-        col: 1
+        col: 1,
+        nox: ["-1", "+1"],
+        commonNox: "+1",
+        atomicRadius: "37 pm",
+        electronegativity: "2.20",
+        ionizationEnergy: "1312 kJ/mol",
+        abundance: "0.14%",
+        discoveryYear: "1766",
+        applications: "Combustível, fertilizantes, produção de amônia, hidrogenação",
+        noxExplanation: "O hidrogênio pode perder seu único elétron formando H⁺ ou ganhar um elétron formando H⁻ (em hidretos metálicos)."
     },
     {
         number: 2,
@@ -26,7 +35,16 @@ const elementsData = [
         melting: "-272.2°C",
         boiling: "-268.93°C",
         row: 1,
-        col: 18
+        col: 18,
+        nox: ["0"],
+        commonNox: "0",
+        atomicRadius: "31 pm",
+        electronegativity: "N/A",
+        ionizationEnergy: "2372 kJ/mol",
+        abundance: "0.000005%",
+        discoveryYear: "1895",
+        applications: "Balões, refrigeração criogênica, atmosfera inerte para soldagem",
+        noxExplanation: "O hélio é um gás nobre com configuração eletrônica estável, não forma compostos químicos comuns."
     },
     {
         number: 3,
@@ -40,7 +58,16 @@ const elementsData = [
         melting: "180.5°C",
         boiling: "1342°C",
         row: 2,
-        col: 1
+        col: 1,
+        nox: ["+1"],
+        atomicRadius: "152 pm",
+        electronegativity: "0.98",
+        ionizationEnergy: "520 kJ/mol",
+        abundance: "0.002%",
+        discoveryYear: "1817",
+        applications: "Baterias, ligas metálicas, medicamentos psiquiátricos",
+        commonNox: "+1",
+        noxExplanation: "O lítio perde facilmente seu elétron de valência, formando o íon Li⁺."
     },
     {
         number: 4,
@@ -54,7 +81,16 @@ const elementsData = [
         melting: "1287°C",
         boiling: "2469°C",
         row: 2,
-        col: 2
+        col: 2,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "112 pm",
+        electronegativity: "1.57",
+        ionizationEnergy: "899 kJ/mol",
+        abundance: "0.0002%",
+        discoveryYear: "1798",
+        applications: "Ligas aeroespaciais, janelas de raios-X, moderador de nêutrons",
+        noxExplanation: "O berílio perde seus dois elétrons de valência, formando o íon Be²⁺."
     },
     {
         number: 5,
@@ -68,7 +104,16 @@ const elementsData = [
         melting: "2075°C",
         boiling: "4000°C",
         row: 2,
-        col: 13
+        col: 13,
+        nox: ["-3", "+3"],
+        commonNox: "+3",
+        atomicRadius: "87 pm",
+        electronegativity: "2.04",
+        ionizationEnergy: "801 kJ/mol",
+        abundance: "0.001%",
+        discoveryYear: "1808",
+        applications: "Vidros borossilicatos, cerâmicas, detergentes, semicondutores",
+        noxExplanation: "O boro pode formar compostos covalentes perdendo 3 elétrons ou compartilhando-os."
     },
     {
         number: 6,
@@ -82,7 +127,16 @@ const elementsData = [
         melting: "3550°C",
         boiling: "4027°C",
         row: 2,
-        col: 14
+        col: 14,
+        nox: ["-4", "-3", "-2", "-1", "0", "+1", "+2", "+3", "+4"],
+        commonNox: "+4",
+        atomicRadius: "67 pm",
+        electronegativity: "2.55",
+        ionizationEnergy: "1086 kJ/mol",
+        abundance: "0.02%",
+        discoveryYear: "Pré-histórico",
+        applications: "Compostos orgânicos, diamante, grafite, nanotubos de carbono",
+        noxExplanation: "O carbono apresenta grande versatilidade, podendo formar 4 ligações covalentes."
     },
     {
         number: 7,
@@ -96,7 +150,16 @@ const elementsData = [
         melting: "-210.1°C",
         boiling: "-195.79°C",
         row: 2,
-        col: 15
+        col: 15,
+        nox: ["-3", "-2", "-1", "0", "+1", "+2", "+3", "+4", "+5"],
+        commonNox: "-3",
+        atomicRadius: "56 pm",
+        electronegativity: "3.04",
+        ionizationEnergy: "1402 kJ/mol",
+        abundance: "0.002%",
+        discoveryYear: "1772",
+        applications: "Fertilizantes, explosivos, atmosfera inerte, produção de amônia",
+        noxExplanation: "O nitrogênio tende a completar seu octeto ganhando 3 elétrons, mas pode apresentar vários NOX."
     },
     {
         number: 8,
@@ -110,7 +173,10 @@ const elementsData = [
         melting: "-218.79°C",
         boiling: "-182.95°C",
         row: 2,
-        col: 16
+        col: 16,
+        nox: ["-2", "-1", "0", "+1", "+2"],
+        commonNox: "-2",
+        noxExplanation: "O oxigênio tende a ganhar 2 elétrons completando seu octeto, exceto em peróxidos (-1)."
     },
     {
         number: 9,
@@ -124,7 +190,16 @@ const elementsData = [
         melting: "-219.67°C",
         boiling: "-188.11°C",
         row: 2,
-        col: 17
+        col: 17,
+        nox: ["-1", "0"],
+        commonNox: "-1",
+        atomicRadius: "42 pm",
+        electronegativity: "3.98",
+        ionizationEnergy: "1681 kJ/mol",
+        abundance: "0.065%",
+        discoveryYear: "1886",
+        applications: "Pasta de dente, refrigerantes, teflon, enriquecimento de urânio",
+        noxExplanation: "O flúor é o mais eletronegativo, sempre -1 em compostos (exceto F₂)."
     },
     {
         number: 10,
@@ -138,7 +213,16 @@ const elementsData = [
         melting: "-248.59°C",
         boiling: "-246.05°C",
         row: 2,
-        col: 18
+        col: 18,
+        nox: ["0"],
+        commonNox: "0",
+        atomicRadius: "38 pm",
+        electronegativity: "N/A",
+        ionizationEnergy: "2081 kJ/mol",
+        abundance: "0.000005%",
+        discoveryYear: "1898",
+        applications: "Letreiros luminosos, lasers, refrigeração criogênica",
+        noxExplanation: "O neônio é um gás nobre, não forma compostos químicos comuns."
     },
     {
         number: 11,
@@ -152,7 +236,16 @@ const elementsData = [
         melting: "97.79°C",
         boiling: "883°C",
         row: 3,
-        col: 1
+        col: 1,
+        nox: ["+1"],
+        commonNox: "+1",
+        atomicRadius: "186 pm",
+        electronegativity: "0.93",
+        ionizationEnergy: "496 kJ/mol",
+        abundance: "2.36%",
+        discoveryYear: "1807",
+        applications: "Sal de cozinha, sabão, lâmpadas de vapor de sódio",
+        noxExplanation: "O sódio perde facilmente seu elétron de valência, formando Na⁺."
     },
     {
         number: 12,
@@ -166,7 +259,16 @@ const elementsData = [
         melting: "650°C",
         boiling: "1090°C",
         row: 3,
-        col: 2
+        col: 2,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "160 pm",
+        electronegativity: "1.31",
+        ionizationEnergy: "738 kJ/mol",
+        abundance: "2.33%",
+        discoveryYear: "1808",
+        applications: "Ligas leves, fogos de artifício, suplementos nutricionais",
+        noxExplanation: "O magnésio perde seus dois elétrons de valência, formando Mg²⁺."
     },
     {
         number: 13,
@@ -180,7 +282,16 @@ const elementsData = [
         melting: "660.32°C",
         boiling: "2519°C",
         row: 3,
-        col: 13
+        col: 13,
+        nox: ["+3"],
+        commonNox: "+3",
+        atomicRadius: "118 pm",
+        electronegativity: "1.61",
+        ionizationEnergy: "578 kJ/mol",
+        abundance: "8.23%",
+        discoveryYear: "1825",
+        applications: "Latas, aviões, construção civil, cabos elétricos",
+        noxExplanation: "O alumínio perde seus três elétrons de valência, formando Al³⁺."
     },
     {
         number: 14,
@@ -194,7 +305,16 @@ const elementsData = [
         melting: "1414°C",
         boiling: "3265°C",
         row: 3,
-        col: 14
+        col: 14,
+        nox: ["-4", "+2", "+4"],
+        commonNox: "+4",
+        atomicRadius: "111 pm",
+        electronegativity: "1.90",
+        ionizationEnergy: "787 kJ/mol",
+        abundance: "27.7%",
+        discoveryYear: "1854",
+        applications: "Semicondutores, chips de computador, vidro, cimento",
+        noxExplanation: "O silício forma principalmente compostos covalentes, especialmente SiO₄⁴⁻."
     },
     {
         number: 15,
@@ -208,7 +328,16 @@ const elementsData = [
         melting: "44.15°C",
         boiling: "280.5°C",
         row: 3,
-        col: 15
+        col: 15,
+        nox: ["-3", "+1", "+3", "+5"],
+        commonNox: "+5",
+        atomicRadius: "98 pm",
+        electronegativity: "2.19",
+        ionizationEnergy: "1012 kJ/mol",
+        abundance: "0.105%",
+        discoveryYear: "1669",
+        applications: "Fertilizantes, detergentes, fósforos, DNA/RNA",
+        noxExplanation: "O fósforo pode ganhar 3 elétrons ou usar diferentes orbitais d para oxidações positivas."
     },
     {
         number: 16,
@@ -222,7 +351,16 @@ const elementsData = [
         melting: "115.21°C",
         boiling: "444.61°C",
         row: 3,
-        col: 16
+        col: 16,
+        nox: ["-2", "+2", "+4", "+6"],
+        commonNox: "-2",
+        atomicRadius: "88 pm",
+        electronegativity: "2.58",
+        ionizationEnergy: "1000 kJ/mol",
+        abundance: "0.035%",
+        discoveryYear: "Pré-histórico",
+        applications: "Ácido sulfúrico, pólvora, vulcanização da borracha",
+        noxExplanation: "O enxofre tende a ganhar 2 elétrons, mas pode usar orbitais d para NOX positivos."
     },
     {
         number: 17,
@@ -236,7 +374,16 @@ const elementsData = [
         melting: "-101.5°C",
         boiling: "-34.04°C",
         row: 3,
-        col: 17
+        col: 17,
+        nox: ["-1", "+1", "+3", "+5", "+7"],
+        commonNox: "-1",
+        atomicRadius: "79 pm",
+        electronegativity: "3.16",
+        ionizationEnergy: "1251 kJ/mol",
+        abundance: "0.015%",
+        discoveryYear: "1774",
+        applications: "Desinfetante, PVC, água tratada, alvejante",
+        noxExplanation: "O cloro tende a ganhar 1 elétron, mas pode usar orbitais d para NOX positivos."
     },
     {
         number: 18,
@@ -250,7 +397,16 @@ const elementsData = [
         melting: "-189.35°C",
         boiling: "-185.85°C",
         row: 3,
-        col: 18
+        col: 18,
+        nox: ["0"],
+        commonNox: "0",
+        atomicRadius: "71 pm",
+        electronegativity: "N/A",
+        ionizationEnergy: "1521 kJ/mol",
+        abundance: "0.00015%",
+        discoveryYear: "1894",
+        applications: "Soldagem, lâmpadas incandescentes, atmosfera inerte",
+        noxExplanation: "O argônio é um gás nobre, não forma compostos químicos comuns."
     },
     {
         number: 19,
@@ -264,7 +420,16 @@ const elementsData = [
         melting: "63.5°C",
         boiling: "759°C",
         row: 4,
-        col: 1
+        col: 1,
+        nox: ["+1"],
+        commonNox: "+1",
+        atomicRadius: "203 pm",
+        electronegativity: "0.82",
+        ionizationEnergy: "419 kJ/mol",
+        abundance: "2.09%",
+        discoveryYear: "1807",
+        applications: "Fertilizantes, sabão, vidro, explosivos",
+        noxExplanation: "O potássio perde facilmente seu elétron de valência, formando K⁺."
     },
     {
         number: 20,
@@ -278,7 +443,16 @@ const elementsData = [
         melting: "842°C",
         boiling: "1484°C",
         row: 4,
-        col: 2
+        col: 2,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "176 pm",
+        electronegativity: "1.00",
+        ionizationEnergy: "590 kJ/mol",
+        abundance: "4.15%",
+        discoveryYear: "1808",
+        applications: "Cimento, gesso, ossos e dentes, suplementos",
+        noxExplanation: "O cálcio perde seus dois elétrons de valência, formando Ca²⁺."
     },
     {
         number: 21,
@@ -292,7 +466,16 @@ const elementsData = [
         melting: "1541°C",
         boiling: "2836°C",
         row: 4,
-        col: 3
+        col: 3,
+        nox: ["+3"],
+        commonNox: "+3",
+        atomicRadius: "170 pm",
+        electronegativity: "1.36",
+        ionizationEnergy: "633 kJ/mol",
+        abundance: "0.0022%",
+        discoveryYear: "1879",
+        applications: "Ligas aeroespaciais, lâmpadas de alta intensidade",
+        noxExplanation: "O escândio forma principalmente o íon Sc³⁺."
     },
     {
         number: 22,
@@ -306,7 +489,16 @@ const elementsData = [
         melting: "1668°C",
         boiling: "3287°C",
         row: 4,
-        col: 4
+        col: 4,
+        nox: ["+2", "+3", "+4"],
+        commonNox: "+4",
+        atomicRadius: "160 pm",
+        electronegativity: "1.54",
+        ionizationEnergy: "659 kJ/mol",
+        abundance: "0.565%",
+        discoveryYear: "1791",
+        applications: "Implantes médicos, aviação, tinta branca, joias",
+        noxExplanation: "O titânio apresenta múltiplos estados de oxidação, sendo +4 o mais estável."
     },
     {
         number: 23,
@@ -320,7 +512,16 @@ const elementsData = [
         melting: "1910°C",
         boiling: "3407°C",
         row: 4,
-        col: 5
+        col: 5,
+        nox: ["+2", "+3", "+4", "+5"],
+        commonNox: "+5",
+        atomicRadius: "153 pm",
+        electronegativity: "1.63",
+        ionizationEnergy: "651 kJ/mol",
+        abundance: "0.012%",
+        discoveryYear: "1801",
+        applications: "Ligas de aço, catalisadores, baterias redox",
+        noxExplanation: "O vanádio apresenta vários NOX, sendo +5 comum em vanadatos."
     },
     {
         number: 24,
@@ -334,7 +535,16 @@ const elementsData = [
         melting: "1907°C",
         boiling: "2671°C",
         row: 4,
-        col: 6
+        col: 6,
+        nox: ["+2", "+3", "+6"],
+        commonNox: "+3",
+        atomicRadius: "139 pm",
+        electronegativity: "1.66",
+        ionizationEnergy: "653 kJ/mol",
+        abundance: "0.010%",
+        discoveryYear: "1797",
+        applications: "Aço inoxidável, cromagem, pigmentos, curtimento",
+        noxExplanation: "O cromo apresenta NOX +3 (estável) e +6 (em dicromatos)."
     },
     {
         number: 25,
@@ -348,7 +558,16 @@ const elementsData = [
         melting: "1246°C",
         boiling: "2061°C",
         row: 4,
-        col: 7
+        col: 7,
+        nox: ["+2", "+3", "+4", "+6", "+7"],
+        commonNox: "+2",
+        atomicRadius: "139 pm",
+        electronegativity: "1.55",
+        ionizationEnergy: "717 kJ/mol",
+        abundance: "0.095%",
+        discoveryYear: "1774",
+        applications: "Ligas de aço, baterias, fertilizantes, permanganato",
+        noxExplanation: "O manganês apresenta grande variedade de NOX, +7 em permanganatos."
     },
     {
         number: 26,
@@ -362,7 +581,16 @@ const elementsData = [
         melting: "1538°C",
         boiling: "2861°C",
         row: 4,
-        col: 8
+        col: 8,
+        nox: ["+2", "+3"],
+        commonNox: "+3",
+        atomicRadius: "132 pm",
+        electronegativity: "1.83",
+        ionizationEnergy: "762 kJ/mol",
+        abundance: "5.63%",
+        discoveryYear: "Pré-histórico",
+        applications: "Aço, construção, transporte, hemoglobina",
+        noxExplanation: "O ferro apresenta principalmente NOX +2 e +3, sendo +3 mais estável."
     },
     {
         number: 27,
@@ -376,7 +604,16 @@ const elementsData = [
         melting: "1495°C",
         boiling: "2927°C",
         row: 4,
-        col: 9
+        col: 9,
+        nox: ["+2", "+3"],
+        commonNox: "+2",
+        atomicRadius: "126 pm",
+        electronegativity: "1.88",
+        ionizationEnergy: "760 kJ/mol",
+        abundance: "0.0025%",
+        discoveryYear: "1735",
+        applications: "Ímãs, baterias de lítio, catalisadores, pigmento azul",
+        noxExplanation: "O cobalto apresenta NOX +2 (mais comum) e +3."
     },
     {
         number: 28,
@@ -390,7 +627,16 @@ const elementsData = [
         melting: "1455°C",
         boiling: "2913°C",
         row: 4,
-        col: 10
+        col: 10,
+        nox: ["+2", "+3"],
+        commonNox: "+2",
+        atomicRadius: "124 pm",
+        electronegativity: "1.91",
+        ionizationEnergy: "737 kJ/mol",
+        abundance: "0.0084%",
+        discoveryYear: "1751",
+        applications: "Moedas, aço inoxidável, baterias, catalisadores",
+        noxExplanation: "O níquel apresenta principalmente NOX +2, menos comum +3."
     },
     {
         number: 29,
@@ -404,7 +650,16 @@ const elementsData = [
         melting: "1084.62°C",
         boiling: "2562°C",
         row: 4,
-        col: 11
+        col: 11,
+        nox: ["+1", "+2"],
+        commonNox: "+2",
+        atomicRadius: "128 pm",
+        electronegativity: "1.90",
+        ionizationEnergy: "745 kJ/mol",
+        abundance: "0.006%",
+        discoveryYear: "Pré-histórico",
+        applications: "Fiação elétrica, encanamento, moedas, ligas",
+        noxExplanation: "O cobre apresenta NOX +1 (cuproso) e +2 (cúprico)."
     },
     {
         number: 30,
@@ -418,7 +673,16 @@ const elementsData = [
         melting: "419.53°C",
         boiling: "907°C",
         row: 4,
-        col: 12
+        col: 12,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "134 pm",
+        electronegativity: "1.65",
+        ionizationEnergy: "906 kJ/mol",
+        abundance: "0.007%",
+        discoveryYear: "1746",
+        applications: "Galvanização, baterias, ligas (latão), suplementos",
+        noxExplanation: "O zinco perde seus dois elétrons 4s, formando Zn²⁺."
     },
     {
         number: 31,
@@ -432,7 +696,16 @@ const elementsData = [
         melting: "29.76°C",
         boiling: "2204°C",
         row: 4,
-        col: 13
+        col: 13,
+        nox: ["+3"],
+        commonNox: "+3",
+        atomicRadius: "136 pm",
+        electronegativity: "1.81",
+        ionizationEnergy: "579 kJ/mol",
+        abundance: "0.0019%",
+        discoveryYear: "1875",
+        applications: "Semicondutores, LEDs, termômetros, ligas de baixo ponto de fusão",
+        noxExplanation: "O gálio perde seus três elétrons de valência, formando Ga³⁺."
     },
     {
         number: 32,
@@ -446,7 +719,16 @@ const elementsData = [
         melting: "938.25°C",
         boiling: "2833°C",
         row: 4,
-        col: 14
+        col: 14,
+        nox: ["-4", "+2", "+4"],
+        commonNox: "+4",
+        atomicRadius: "125 pm",
+        electronegativity: "2.01",
+        ionizationEnergy: "762 kJ/mol",
+        abundance: "0.00015%",
+        discoveryYear: "1886",
+        applications: "Semicondutores, transistores, fibra óptica, catalisadores",
+        noxExplanation: "O germânio apresenta NOX +4 mais comum, similar ao silício."
     },
     {
         number: 33,
@@ -460,7 +742,16 @@ const elementsData = [
         melting: "817°C",
         boiling: "614°C",
         row: 4,
-        col: 15
+        col: 15,
+        nox: ["-3", "+3", "+5"],
+        commonNox: "+3",
+        atomicRadius: "114 pm",
+        electronegativity: "2.18",
+        ionizationEnergy: "947 kJ/mol",
+        abundance: "0.00015%",
+        discoveryYear: "1250",
+        applications: "Semicondutores, pesticidas, preservativos de madeira, ligas",
+        noxExplanation: "O arsênio pode ganhar 3 elétrons ou apresentar NOX positivos."
     },
     {
         number: 34,
@@ -474,7 +765,16 @@ const elementsData = [
         melting: "221°C",
         boiling: "685°C",
         row: 4,
-        col: 16
+        col: 16,
+        nox: ["-2", "+2", "+4", "+6"],
+        commonNox: "-2",
+        atomicRadius: "103 pm",
+        electronegativity: "2.55",
+        ionizationEnergy: "941 kJ/mol",
+        abundance: "0.00005%",
+        discoveryYear: "1817",
+        applications: "Células solares, fotocopiadoras, suplementos nutricionais, vidro",
+        noxExplanation: "O selênio comporta-se similarmente ao enxofre."
     },
     {
         number: 35,
@@ -488,7 +788,16 @@ const elementsData = [
         melting: "-7.35°C",
         boiling: "58.8°C",
         row: 4,
-        col: 17
+        col: 17,
+        nox: ["-1", "+1", "+3", "+5", "+7"],
+        commonNox: "-1",
+        atomicRadius: "94 pm",
+        electronegativity: "2.96",
+        ionizationEnergy: "1140 kJ/mol",
+        abundance: "0.0003%",
+        discoveryYear: "1826",
+        applications: "Desinfetantes, retardantes de chama, fotografia, medicamentos",
+        noxExplanation: "O bromo comporta-se similarmente ao cloro."
     },
     {
         number: 36,
@@ -502,7 +811,16 @@ const elementsData = [
         melting: "-157.36°C",
         boiling: "-153.22°C",
         row: 4,
-        col: 18
+        col: 18,
+        nox: ["0", "+2"],
+        commonNox: "0",
+        atomicRadius: "88 pm",
+        electronegativity: "3.00",
+        ionizationEnergy: "1351 kJ/mol",
+        abundance: "0.000001%",
+        discoveryYear: "1898",
+        applications: "Lâmpadas de alta intensidade, lasers, atmosfera inerte",
+        noxExplanation: "O criptônio raramente forma compostos, exceto alguns com flúor."
     },
     {
         number: 37,
@@ -516,7 +834,16 @@ const elementsData = [
         melting: "39.31°C",
         boiling: "688°C",
         row: 5,
-        col: 1
+        col: 1,
+        nox: ["+1"],
+        commonNox: "+1",
+        atomicRadius: "248 pm",
+        electronegativity: "0.82",
+        ionizationEnergy: "403 kJ/mol",
+        abundance: "0.009%",
+        discoveryYear: "1861",
+        applications: "Fotocélulas, catalisadores, pesquisa científica",
+        noxExplanation: "O rubídio perde facilmente seu elétron de valência."
     },
     {
         number: 38,
@@ -530,7 +857,16 @@ const elementsData = [
         melting: "777°C",
         boiling: "1382°C",
         row: 5,
-        col: 2
+        col: 2,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "215 pm",
+        electronegativity: "0.95",
+        ionizationEnergy: "550 kJ/mol",
+        abundance: "0.037%",
+        discoveryYear: "1790",
+        applications: "Fogos de artifício, imãs permanentes, tratamento de osteoporose",
+        noxExplanation: "O estrôncio perde seus dois elétrons de valência."
     },
     {
         number: 39,
@@ -544,7 +880,16 @@ const elementsData = [
         melting: "1526°C",
         boiling: "3345°C",
         row: 5,
-        col: 3
+        col: 3,
+        nox: ["+3"],
+        commonNox: "+3",
+        atomicRadius: "180 pm",
+        electronegativity: "1.22",
+        ionizationEnergy: "600 kJ/mol",
+        abundance: "0.0033%",
+        discoveryYear: "1794",
+        applications: "Supercondutores, LEDs, lasers, ligas de alumínio",
+        noxExplanation: "O ítrio forma principalmente o íon Y³⁺."
     },
     {
         number: 40,
@@ -558,7 +903,16 @@ const elementsData = [
         melting: "1855°C",
         boiling: "4409°C",
         row: 5,
-        col: 4
+        col: 4,
+        nox: ["+4"],
+        commonNox: "+4",
+        atomicRadius: "160 pm",
+        electronegativity: "1.33",
+        ionizationEnergy: "640 kJ/mol",
+        abundance: "0.0165%",
+        discoveryYear: "1789",
+        applications: "Reatores nucleares, cerâmicas, joias, implantes médicos",
+        noxExplanation: "O zircônio apresenta principalmente NOX +4."
     },
     {
         number: 41,
@@ -572,7 +926,16 @@ const elementsData = [
         melting: "2477°C",
         boiling: "4744°C",
         row: 5,
-        col: 5
+        col: 5,
+        nox: ["+3", "+5"],
+        commonNox: "+5",
+        atomicRadius: "146 pm",
+        electronegativity: "1.6",
+        ionizationEnergy: "652 kJ/mol",
+        abundance: "0.002%",
+        discoveryYear: "1801",
+        applications: "Supercondutores, aços especiais, joias, catalisadores",
+        noxExplanation: "O nióbio apresenta principalmente NOX +5."
     },
     {
         number: 42,
@@ -586,7 +949,16 @@ const elementsData = [
         melting: "2623°C",
         boiling: "4639°C",
         row: 5,
-        col: 6
+        col: 6,
+        nox: ["+2", "+3", "+4", "+5", "+6"],
+        commonNox: "+6",
+        atomicRadius: "139 pm",
+        electronegativity: "2.16",
+        ionizationEnergy: "684 kJ/mol",
+        abundance: "0.0015%",
+        discoveryYear: "1781",
+        applications: "Aços especiais, catalisadores, lubrificantes, fertilizantes",
+        noxExplanation: "O molibdênio apresenta vários NOX, sendo +6 o mais comum."
     },
     {
         number: 43,
@@ -656,7 +1028,16 @@ const elementsData = [
         melting: "961.78°C",
         boiling: "2162°C",
         row: 5,
-        col: 11
+        col: 11,
+        nox: ["+1", "+2"],
+        commonNox: "+1",
+        atomicRadius: "144 pm",
+        electronegativity: "1.93",
+        ionizationEnergy: "731 kJ/mol",
+        abundance: "0.00008%",
+        discoveryYear: "Pré-histórico",
+        applications: "Joias, moedas, eletrônicos, fotografia, medicina",
+        noxExplanation: "A prata apresenta principalmente NOX +1."
     },
     {
         number: 48,
@@ -670,7 +1051,16 @@ const elementsData = [
         melting: "321.07°C",
         boiling: "767°C",
         row: 5,
-        col: 12
+        col: 12,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "151 pm",
+        electronegativity: "1.69",
+        ionizationEnergy: "868 kJ/mol",
+        abundance: "0.000015%",
+        discoveryYear: "1817",
+        applications: "Baterias, pigmentos, galvanização, semicondutores",
+        noxExplanation: "O cádmio perde seus dois elétrons 5s."
     },
     {
         number: 49,
@@ -684,7 +1074,16 @@ const elementsData = [
         melting: "156.6°C",
         boiling: "2072°C",
         row: 5,
-        col: 13
+        col: 13,
+        nox: ["+1", "+3"],
+        commonNox: "+3",
+        atomicRadius: "167 pm",
+        electronegativity: "1.78",
+        ionizationEnergy: "558 kJ/mol",
+        abundance: "0.000025%",
+        discoveryYear: "1863",
+        applications: "Telas de toque, LEDs, painéis solares, soldas",
+        noxExplanation: "O índio apresenta principalmente NOX +3."
     },
     {
         number: 50,
@@ -698,7 +1097,16 @@ const elementsData = [
         melting: "231.93°C",
         boiling: "2602°C",
         row: 5,
-        col: 14
+        col: 14,
+        nox: ["+2", "+4"],
+        commonNox: "+4",
+        atomicRadius: "145 pm",
+        electronegativity: "1.96",
+        ionizationEnergy: "709 kJ/mol",
+        abundance: "0.00023%",
+        discoveryYear: "Pré-histórico",
+        applications: "Latas, soldas, bronze, vidro, conservação de alimentos",
+        noxExplanation: "O estanho apresenta NOX +2 (estanoso) e +4 (estânico)."
     },
     {
         number: 51,
@@ -712,7 +1120,16 @@ const elementsData = [
         melting: "630.63°C",
         boiling: "1587°C",
         row: 5,
-        col: 15
+        col: 15,
+        nox: ["-3", "+3", "+5"],
+        commonNox: "+3",
+        atomicRadius: "133 pm",
+        electronegativity: "2.05",
+        ionizationEnergy: "834 kJ/mol",
+        abundance: "0.00002%",
+        discoveryYear: "Pré-histórico",
+        applications: "Baterias, semicondutores, retardantes de chama, ligas",
+        noxExplanation: "O antimônio pode ganhar 3 elétrons ou apresentar NOX positivos."
     },
     {
         number: 52,
@@ -726,7 +1143,16 @@ const elementsData = [
         melting: "449.51°C",
         boiling: "988°C",
         row: 5,
-        col: 16
+        col: 16,
+        nox: ["-2", "+2", "+4", "+6"],
+        commonNox: "+4",
+        atomicRadius: "123 pm",
+        electronegativity: "2.1",
+        ionizationEnergy: "869 kJ/mol",
+        abundance: "0.000001%",
+        discoveryYear: "1782",
+        applications: "Semicondutores, ligas, catalisadores, painéis solares",
+        noxExplanation: "O telúrio apresenta principalmente NOX +4."
     },
     {
         number: 53,
@@ -740,7 +1166,16 @@ const elementsData = [
         melting: "113.7°C",
         boiling: "184.3°C",
         row: 5,
-        col: 17
+        col: 17,
+        nox: ["-1", "+1", "+3", "+5", "+7"],
+        commonNox: "-1",
+        atomicRadius: "115 pm",
+        electronegativity: "2.66",
+        ionizationEnergy: "1008 kJ/mol",
+        abundance: "0.00045%",
+        discoveryYear: "1811",
+        applications: "Desinfetantes, medicamentos, fotografia, sal iodado",
+        noxExplanation: "O iodo comporta-se como os outros halogênios."
     },
     {
         number: 54,
@@ -754,7 +1189,16 @@ const elementsData = [
         melting: "-111.75°C",
         boiling: "-108.09°C",
         row: 5,
-        col: 18
+        col: 18,
+        nox: ["0", "+2", "+4", "+6"],
+        commonNox: "0",
+        atomicRadius: "108 pm",
+        electronegativity: "2.6",
+        ionizationEnergy: "1170 kJ/mol",
+        abundance: "0.0000036%",
+        discoveryYear: "1898",
+        applications: "Lâmpadas de alta intensidade, anestésicos, propulsão espacial",
+        noxExplanation: "O xenônio pode formar alguns compostos, especialmente com flúor."
     },
     {
         number: 55,
@@ -768,7 +1212,16 @@ const elementsData = [
         melting: "28.44°C",
         boiling: "671°C",
         row: 6,
-        col: 1
+        col: 1,
+        nox: ["+1"],
+        commonNox: "+1",
+        atomicRadius: "265 pm",
+        electronegativity: "0.79",
+        ionizationEnergy: "376 kJ/mol",
+        abundance: "0.0003%",
+        discoveryYear: "1860",
+        applications: "Relógios atômicos, catalisadores, células fotovoltaicas",
+        noxExplanation: "O césio perde facilmente seu elétron de valência."
     },
     {
         number: 56,
@@ -782,7 +1235,16 @@ const elementsData = [
         melting: "727°C",
         boiling: "1897°C",
         row: 6,
-        col: 2
+        col: 2,
+        nox: ["+2"],
+        commonNox: "+2",
+        atomicRadius: "217 pm",
+        electronegativity: "0.89",
+        ionizationEnergy: "503 kJ/mol",
+        abundance: "0.0425%",
+        discoveryYear: "1808",
+        applications: "Contraste para raios-X, fogos de artifício, vidros especiais",
+        noxExplanation: "O bário perde seus dois elétrons de valência."
     },
     {
         number: 57,
@@ -796,7 +1258,16 @@ const elementsData = [
         melting: "920°C",
         boiling: "3464°C",
         row: 8,
-        col: 3
+        col: 3,
+        nox: ["+3"],
+        commonNox: "+3",
+        atomicRadius: "195 pm",
+        electronegativity: "1.10",
+        ionizationEnergy: "538 kJ/mol",
+        abundance: "0.0034%",
+        discoveryYear: "1839",
+        applications: "Catalisadores, lentes ópticas, baterias recarregáveis",
+        noxExplanation: "O lantânio forma principalmente o íon La³⁺."
     },
     {
         number: 58,
@@ -1104,7 +1575,16 @@ const elementsData = [
         melting: "1064.18°C",
         boiling: "2856°C",
         row: 6,
-        col: 11
+        col: 11,
+        nox: ["+1", "+3"],
+        commonNox: "+3",
+        atomicRadius: "144 pm",
+        electronegativity: "2.54",
+        ionizationEnergy: "890 kJ/mol",
+        abundance: "0.000004%",
+        discoveryYear: "Pré-histórico",
+        applications: "Joias, eletrônicos, medicina, catalisadores, reserva de valor",
+        noxExplanation: "O ouro apresenta NOX +1 (auroso) e +3 (áurico)."
     },
     {
         number: 80,
@@ -1118,7 +1598,16 @@ const elementsData = [
         melting: "-38.83°C",
         boiling: "356.73°C",
         row: 6,
-        col: 12
+        col: 12,
+        nox: ["+1", "+2"],
+        commonNox: "+2",
+        atomicRadius: "151 pm",
+        electronegativity: "2.00",
+        ionizationEnergy: "1007 kJ/mol",
+        abundance: "0.000085%",
+        discoveryYear: "Pré-histórico",
+        applications: "Termômetros, lâmpadas, amálgamas dentárias, catalisadores",
+        noxExplanation: "O mercúrio apresenta NOX +1 (mercuroso) e +2 (mercúrico)."
     },
     {
         number: 81,
@@ -1146,7 +1635,16 @@ const elementsData = [
         melting: "327.46°C",
         boiling: "1749°C",
         row: 6,
-        col: 14
+        col: 14,
+        nox: ["+2", "+4"],
+        commonNox: "+2",
+        atomicRadius: "175 pm",
+        electronegativity: "2.33",
+        ionizationEnergy: "716 kJ/mol",
+        abundance: "0.0014%",
+        discoveryYear: "Pré-histórico",
+        applications: "Baterias, construção, munição, proteção contra radiação",
+        noxExplanation: "O chumbo apresenta NOX +2 (plumboso) e +4 (plúmbico)."
     },
     {
         number: 83,
@@ -1667,3 +2165,75 @@ const categoryNames = {
     'lanthanide': 'Lantanídeo',
     'actinide': 'Actinídeo'
 };
+
+// Dados de NOX (Estados de Oxidação) dos elementos
+const noxData = {
+    1: { nox: ["-1", "+1"], common: "+1", explanation: "O hidrogênio pode perder seu único elétron formando H⁺ ou ganhar um elétron formando H⁻ (em hidretos metálicos)." },
+    2: { nox: ["0"], common: "0", explanation: "O hélio é um gás nobre com configuração eletrônica estável, não forma compostos químicos comuns." },
+    3: { nox: ["+1"], common: "+1", explanation: "O lítio perde facilmente seu elétron de valência, formando o íon Li⁺." },
+    4: { nox: ["+2"], common: "+2", explanation: "O berílio perde seus dois elétrons de valência, formando o íon Be²⁺." },
+    5: { nox: ["-3", "+3"], common: "+3", explanation: "O boro pode formar compostos covalentes perdendo 3 elétrons ou compartilhando-os." },
+    6: { nox: ["-4", "-3", "-2", "-1", "0", "+1", "+2", "+3", "+4"], common: "+4", explanation: "O carbono apresenta grande versatilidade, podendo formar 4 ligações covalentes." },
+    7: { nox: ["-3", "-2", "-1", "0", "+1", "+2", "+3", "+4", "+5"], common: "-3", explanation: "O nitrogênio tende a completar seu octeto ganhando 3 elétrons, mas pode apresentar vários NOX." },
+    8: { nox: ["-2", "-1", "0", "+1", "+2"], common: "-2", explanation: "O oxigênio tende a ganhar 2 elétrons completando seu octeto, exceto em peróxidos (-1)." },
+    9: { nox: ["-1", "0"], common: "-1", explanation: "O flúor é o mais eletronegativo, sempre -1 em compostos (exceto F₂)." },
+    10: { nox: ["0"], common: "0", explanation: "O neônio é um gás nobre, não forma compostos químicos comuns." },
+    11: { nox: ["+1"], common: "+1", explanation: "O sódio perde facilmente seu elétron de valência, formando Na⁺." },
+    12: { nox: ["+2"], common: "+2", explanation: "O magnésio perde seus dois elétrons de valência, formando Mg²⁺." },
+    13: { nox: ["+3"], common: "+3", explanation: "O alumínio perde seus três elétrons de valência, formando Al³⁺." },
+    14: { nox: ["-4", "+2", "+4"], common: "+4", explanation: "O silício forma principalmente compostos covalentes, especialmente SiO₄⁴⁻." },
+    15: { nox: ["-3", "+1", "+3", "+5"], common: "-3", explanation: "O fósforo pode ganhar 3 elétrons ou usar diferentes orbitais d para oxidações positivas." },
+    16: { nox: ["-2", "+2", "+4", "+6"], common: "-2", explanation: "O enxofre tende a ganhar 2 elétrons, mas pode usar orbitais d para NOX positivos." },
+    17: { nox: ["-1", "+1", "+3", "+5", "+7"], common: "-1", explanation: "O cloro tende a ganhar 1 elétron, mas pode usar orbitais d para NOX positivos." },
+    18: { nox: ["0"], common: "0", explanation: "O argônio é um gás nobre, não forma compostos químicos comuns." },
+    19: { nox: ["+1"], common: "+1", explanation: "O potássio perde facilmente seu elétron de valência, formando K⁺." },
+    20: { nox: ["+2"], common: "+2", explanation: "O cálcio perde seus dois elétrons de valência, formando Ca²⁺." },
+    21: { nox: ["+3"], common: "+3", explanation: "O escândio forma principalmente o íon Sc³⁺." },
+    22: { nox: ["+2", "+3", "+4"], common: "+4", explanation: "O titânio apresenta múltiplos estados de oxidação, sendo +4 o mais estável." },
+    23: { nox: ["+2", "+3", "+4", "+5"], common: "+5", explanation: "O vanádio apresenta vários NOX, sendo +5 comum em vanadatos." },
+    24: { nox: ["+2", "+3", "+6"], common: "+3", explanation: "O cromo apresenta NOX +3 (estável) e +6 (em dicromatos)." },
+    25: { nox: ["+2", "+3", "+4", "+6", "+7"], common: "+2", explanation: "O manganês apresenta grande variedade de NOX, +7 em permanganatos." },
+    26: { nox: ["+2", "+3"], common: "+3", explanation: "O ferro apresenta principalmente NOX +2 e +3, sendo +3 mais estável." },
+    27: { nox: ["+2", "+3"], common: "+2", explanation: "O cobalto apresenta NOX +2 (mais comum) e +3." },
+    28: { nox: ["+2", "+3"], common: "+2", explanation: "O níquel apresenta principalmente NOX +2, menos comum +3." },
+    29: { nox: ["+1", "+2"], common: "+2", explanation: "O cobre apresenta NOX +1 (cuproso) e +2 (cúprico)." },
+    30: { nox: ["+2"], common: "+2", explanation: "O zinco perde seus dois elétrons 4s, formando Zn²⁺." },
+    31: { nox: ["+3"], common: "+3", explanation: "O gálio perde seus três elétrons de valência, formando Ga³⁺." },
+    32: { nox: ["-4", "+2", "+4"], common: "+4", explanation: "O germânio apresenta NOX +4 mais comum, similar ao silício." },
+    33: { nox: ["-3", "+3", "+5"], common: "+3", explanation: "O arsênio pode ganhar 3 elétrons ou apresentar NOX positivos." },
+    34: { nox: ["-2", "+2", "+4", "+6"], common: "-2", explanation: "O selênio comporta-se similarmente ao enxofre." },
+    35: { nox: ["-1", "+1", "+3", "+5", "+7"], common: "-1", explanation: "O bromo comporta-se similarmente ao cloro." },
+    36: { nox: ["0", "+2"], common: "0", explanation: "O criptônio raramente forma compostos, exceto alguns com flúor." },
+    37: { nox: ["+1"], common: "+1", explanation: "O rubídio perde facilmente seu elétron de valência." },
+    38: { nox: ["+2"], common: "+2", explanation: "O estrôncio perde seus dois elétrons de valência." },
+    47: { nox: ["+1", "+2"], common: "+1", explanation: "A prata apresenta principalmente NOX +1." },
+    48: { nox: ["+2"], common: "+2", explanation: "O cádmio perde seus dois elétrons 5s." },
+    50: { nox: ["+2", "+4"], common: "+4", explanation: "O estanho apresenta NOX +2 (estanoso) e +4 (estânico)." },
+    53: { nox: ["-1", "+1", "+3", "+5", "+7"], common: "-1", explanation: "O iodo comporta-se como os outros halogênios." },
+    54: { nox: ["0", "+2", "+4", "+6"], common: "0", explanation: "O xenônio pode formar alguns compostos, especialmente com flúor." },
+    55: { nox: ["+1"], common: "+1", explanation: "O césio perde facilmente seu elétron de valência." },
+    56: { nox: ["+2"], common: "+2", explanation: "O bário perde seus dois elétrons de valência." },
+    79: { nox: ["+1", "+3"], common: "+3", explanation: "O ouro apresenta NOX +1 (auroso) e +3 (áurico)." },
+    80: { nox: ["+1", "+2"], common: "+2", explanation: "O mercúrio apresenta NOX +1 (mercuroso) e +2 (mercúrico)." },
+    82: { nox: ["+2", "+4"], common: "+2", explanation: "O chumbo apresenta NOX +2 (plumboso) e +4 (plúmbico)." }
+};
+
+// Função para aplicar dados de NOX aos elementos
+function applyNoxData() {
+    elementsData.forEach(element => {
+        const noxInfo = noxData[element.number];
+        if (noxInfo) {
+            element.nox = noxInfo.nox;
+            element.commonNox = noxInfo.common;
+            element.noxExplanation = noxInfo.explanation;
+        } else {
+            // Valores padrão para elementos sem dados específicos
+            element.nox = ["0"];
+            element.commonNox = "0";
+            element.noxExplanation = "Dados de NOX não disponíveis para este elemento.";
+        }
+    });
+}
+
+// Aplicar dados de NOX automaticamente
+applyNoxData();
