@@ -2,222 +2,211 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Tabela Periódica QUI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela Periódica Interativa</title>
+    
+    <!-- Estilos do Google Arts 3D Periodic Table -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.12.0/tachyons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js para visualização 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
     <style>
-        * {
+        /* Estilos baseados no 3D Periodic Table */
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            background: #fff;
+            color: #000;
+            overflow-x: hidden;
         }
         
-        body {
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            overflow: hidden;
+        .main-container {
+            width: 100%;
             height: 100vh;
-            touch-action: manipulation;
+            display: flex;
+            flex-direction: column;
         }
         
-        #splash-screen {
-            position: fixed;
+        .header-container {
+            position: absolute;
             top: 0;
-            left: 0;
+            background: white;
+            color: black;
+            width: 100%;
+            height: 70.4px;
+            padding: 0 13.2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-container h1 {
+            margin: 0;
+            font-size: 1.65rem;
+            font-weight: 500;
+        }
+        
+        .content-wrapper {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #2c3e50, #4ca1af);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.5s ease;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        #splash-screen h1 {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        #splash-screen p {
-            font-size: 1rem;
-            margin-bottom: 30px;
-            color: rgba(255,255,255,0.9);
-            max-width: 90%;
-        }
-        
-        #enter-button {
-            padding: 12px 30px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        #enter-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        
-        .container {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            overflow: auto;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background: #f0f0f0;
-            flex-direction: column;
-        }
-        
-        .fullscreen-header {
-            padding: 15px;
-            background: #2c3e50;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: -1;
-            height: 70px;
-        }
-        
-        .fullscreen-header h1 {
-            font-size: 1.4rem;
-            text-align: center;
-            flex: 1;
-        }
-        
-        .header-buttons {
-            display: flex;
-            gap: 10px;
-            margin-right: 27%;
-        }
-        
-        .header-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .header-btn:active {
-            transform: scale(0.95);
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .back-button {
-            display: none;
+            margin-top: 70.4px;
         }
         
         .table-container {
-            overflow: auto;
-            flex: 1;
+            width: calc(100% - 352px);
+            height: 100%;
             position: relative;
-            touch-action: manipulation;
+            overflow: auto;
+            background: #f8f9fa;
+            margin-left: 352px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease-in-out;
         }
         
-        .periodic-table {
+        .table-container.sidebar-right {
+            margin-left: 0;
+            margin-right: 352px;
+        }
+        
+        .table {
+            padding: 6.6px;
+            padding-bottom: 110px;
+            min-width: 880px;
             display: grid;
-            grid-template-columns: repeat(18, 1fr);
-            gap: 2px;
-            padding: 5px;
-            padding-bottom: 15px;
-            width: max-content;
-            min-width: 98%;
+            grid-template-columns: 33px repeat(18, 61.6px);
+            grid-template-rows: 24.2px repeat(9, 61.6px);
+            gap: 1.65px;
             margin: 0 auto;
-            transform-origin: 0 0;
+            transform-origin: center center;
             transition: transform 0.1s ease-out;
+            box-sizing: border-box;
+            width: fit-content;
         }
         
         .element {
-            aspect-ratio: 1;
-            min-width: 35px;
-            min-height: 35px;
+            width: 61.6px;
+            height: 61.6px;
+            border: 1px solid #ccc;
+            border-radius: 3.3px;
+            cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.7rem;
+            font-size: clamp(0.44rem, 0.99vw, 0.715rem);
             font-weight: bold;
             text-align: center;
             position: relative;
             overflow: hidden;
             background: #fff;
             transition: transform 0.2s ease, box-shadow 0.3s ease;
-        }
-        
-        .element:active {
-            transform: scale(0.95);
-        }
-        
-        .element.highlighted {
-            box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5);
-            z-index: 10;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5); }
-            50% { box-shadow: 0 0 0 5px #ff5252, 0 0 15px 8px rgba(255, 82, 82, 0.7); }
-            100% { box-shadow: 0 0 0 3px #ff5252, 0 0 10px 5px rgba(255, 82, 82, 0.5); }
+            box-sizing: border-box;
+            color: #222;
         }
         
         .element .number {
-            font-size: 0.6rem;
+            font-size: clamp(0.4125rem, 0.825vw, 0.6875rem);
             position: absolute;
-            top: 2px;
-            left: 2px;
+            top: 1.1px;
+            left: 2.2px;
             color: #1f1f1f;
         }
         
         .element .symbol {
-            font-size: 0.9rem;
+            font-size: clamp(0.6875rem, 1.5125vw, 1.03125rem);
             font-weight: bold;
-            margin: 2px 0;
+            margin: 1.1px 0;
             color: #222;
+            line-height: 1;
         }
         
         .element .name {
-            font-size: 0.5rem;
+            font-size: clamp(0.34375rem, 0.6875vw, 0.55rem);
             color: #353535;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            width: 100%;
-            margin-bottom: 5px;
+            width: calc(100% - 4.4px);
+            margin-bottom: 1.1px;
+            line-height: 1;
         }
         
         .element .mass {
-            font-size: 0.5rem;
+            font-size: clamp(0.34375rem, 0.6875vw, 0.55rem);
             color: #1f1f1f;
             position: absolute;
-            bottom: 1px;
-            right: 2px;
+            bottom: 1.1px;
+            right: 2.2px;
+            line-height: 1;
+        }
+        
+        .empty-space {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+        
+        .group-label, .period-label {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+            border: 1px solid #95a5a6;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 1.1;
+        }
+        
+        .group-label {
+            width: 61.6px;
+            height: 24.2px;
+            margin-top: -3px;
+        }
+        
+        .period-label {
+            width: 33px;
+            height: 61.6px;
+            margin-left: -3px;
+        }
+        
+        .group-label .old-notation {
+            font-size: 0.44rem;
+            color: #7f8c8d;
+            margin-top: 0px;
+        }
+        
+        .period-label .period-number {
+            font-size: 0.715rem;
+            color: #2c3e50;
+        }
+        
+        .element:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .element.highlight {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         /* Cores por categoria otimizadas */
@@ -261,764 +250,1087 @@
             background-color: #dcadd6;
         }
         
-        .empty-space {
-            background: transparent;
-            border: none;
-            cursor: default;
+        .lanthanide-indicator {
+            background: linear-gradient(135deg, #90e3e9, #74b9ff) !important;
+            border: 2px dashed #2c3e50 !important;
+            animation: indicatorPulse 2s infinite;
         }
         
-        /* Modal centralizado em todas as orientações */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
+        .actinide-indicator {
+            background: linear-gradient(135deg, #dcadd6, #a29bfe) !important;
+            border: 2px dashed #2c3e50 !important;
+            animation: indicatorPulse 2s infinite;
+        }
+        
+        @keyframes indicatorPulse {
+            0% { box-shadow: 0 0 0 0 rgba(44, 62, 80, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(44, 62, 80, 0.1); }
+            100% { box-shadow: 0 0 0 0 rgba(44, 62, 80, 0.4); }
+        }
+        
+        .sidebar {
+            position: absolute;
             left: 0;
-            width: 100%;
+            top: 0;
+            width: 352px;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 9999; /* Aumentado para sobrepor zoom-controls */
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            }
-
-            /* Conteúdo do modal */
-            .modal-content {
             background: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-            position: absolute;
-            max-height: 80vh;
+            border-right: 1px solid #e0e0e0;
             overflow-y: auto;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            transition: transform 0.3s ease;
-            z-index: 10000; /* Garantia extra dentro do modal */
-            }
-        
-        .modal.show {
-            opacity: 1;
+            z-index: 50;
+            transform: translateX(0);
+            transition: all 0.25s ease-in-out;
         }
         
-        .modal.show .modal-content {
-            transform: translate(-50%, -50%) scale(1);
+        .sidebar.collapsed {
+            transform: translateX(-100%);
         }
         
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #777;
-            cursor: pointer;
-            z-index: 10;
+        .sidebar.right-position {
+            left: auto;
+            right: 0;
+            border-right: none;
+            border-left: 1px solid #e0e0e0;
         }
         
-        .modal-header {
-            padding: 20px 20px 10px;
-            border-bottom: 1px solid #eee;
+        .sidebar.right-position.collapsed {
+            transform: translateX(100%);
+        }
+        
+        .sidebar-header {
+            height: 70.4px;
+            padding: 0 22px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
         }
         
-        .modal-symbol {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
+        .sidebar-content {
+            padding: 22px;
+        }
+        
+        .sidebar-element {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-right: 15px;
             font-weight: bold;
+            text-align: center;
             position: relative;
+            overflow: hidden;
+            background: #fff;
+            margin: 0 auto 22px auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
         
-        .modal-symbol .symbol {
-            font-size: 2rem;
+        .sidebar-element:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        
+        .sidebar-element .element-number {
+            font-size: 0.8rem;
+            position: absolute;
+            top: 4px;
+            left: 6px;
+            color: #1f1f1f;
+            font-weight: bold;
+        }
+        
+        .sidebar-element .element-symbol {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 8px 0;
+            color: #222;
             line-height: 1;
         }
         
-        .modal-symbol .number {
-            position: absolute;
-            top: 5px;
-            left: 8px;
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-        
-        .modal-symbol .mass {
-            position: absolute;
-            bottom: 5px;
-            right: 8px;
+        .sidebar-element .element-name {
             font-size: 0.7rem;
-            opacity: 0.8;
+            color: #353535;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            width: calc(100% - 12px);
+            margin-bottom: 4px;
+            line-height: 1;
+            font-weight: 500;
         }
         
-        .modal-title {
+        .sidebar-element .element-mass {
+            font-size: 0.65rem;
+            color: #1f1f1f;
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            line-height: 1;
+            font-weight: bold;
+        }
+        
+        .category-info {
+            display: flex;
+            align-items: center;
+            margin: 22px 0;
+        }
+        
+        .color-dot {
+            width: 17.6px;
+            height: 17.6px;
+            border-radius: 50%;
+            margin-right: 11px;
+        }
+        
+        .visualization-container {
+            width: 100%;
+            height: 330px;
+            margin: 22px 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 8.8px;
+            position: relative;
+            background: #f8f9fa;
+        }
+        
+        #atom-container-2d {
+            width: 100%;
+            height: 100%;
+            background: #f8fafc;
+            border-radius: 8.8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .visualization-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tab-button {
             flex: 1;
+            padding: 11px;
+            border: none;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 15.4px;
+            transition: background 0.2s;
         }
         
-        .modal-title h2 {
-            font-size: 1.6rem;
-            margin-bottom: 5px;
-            color: #333;
+        .tab-button.active {
+            background: white;
+            border-bottom: 2px solid #0060F0;
         }
         
-        .modal-title .number {
-            color: #666;
-            font-size: 0.9rem;
+        .tab-content {
+            display: none;
+            height: calc(100% - 44px);
         }
         
-        .modal-properties {
-            padding: 15px 20px 20px;
+        .tab-content.active {
+            display: block;
         }
         
-        .property {
+        .properties-list {
+            list-style: none;
+            padding: 0;
+            margin: 22px 0;
+        }
+        
+        .properties-list li {
+            padding: 8.8px 0;
+            border-bottom: 1px solid #f0f0f0;
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
         }
         
-        .property:last-child {
+        .properties-list li:last-child {
             border-bottom: none;
         }
         
-        .property strong {
-            color: #555;
-            font-weight: 600;
+        .property-label {
+            font-weight: 500;
+            color: #333;
         }
         
-        .property span {
-            color: #222;
+        .property-value {
+            color: #666;
             text-align: right;
-            max-width: 60%;
         }
         
-        .legend-modal .modal-content {
-            max-width: 400px;
+        .bottom-panel {
+            position: absolute;
+            bottom: 0;
+            left: 352px;
+            right: 0;
+            height: 70px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 16.5px;
+            display: flex;
+            flex-direction: column;
+            z-index: 40;
+            transition: all 0.25s ease-in-out;
         }
         
-        .legend-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            font-size: 0.75rem;
-            padding: 15px 20px 20px;
+        .bottom-panel.sidebar-right {
+            left: 0;
+            right: 352px;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 11px;
+            margin-top: 11px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
-        
-        .legend-item:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .legend-item.active {
-            background-color: #e3f2fd;
-            font-weight: bold;
+            padding: 5.5px 11px;
+            border-radius: 22px;
+            font-size: 13.2px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
         }
         
         .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.1);
-            flex-shrink: 0;
-        }
-        
-        .legend-item span {
-            font-weight: 500;
-            color: #444;
-        }
-        
-        /* Controles de Zoom Melhorados */
-        .zoom-controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100; /* Antes estava -1 */
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 25px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            }
-        
-        .zoom-btn {
-            width: 50px;
-            height: 50px;
+            width: 13.2px;
+            height: 13.2px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #2c3e50);
+            margin-right: 6.6px;
+        }
+        
+        .toggle-sidebar {
+            position: absolute;
+            right: 50px;
+            top: 22px;
+            background: #0060F0;
             color: white;
             border: none;
-            font-size: 1.6rem;
-            font-weight: bold;
+            padding: 11px 16.5px;
+            border-radius: 22px;
             cursor: pointer;
-            display: flex;
+            font-size: 15.4px;
+            z-index: 60;
+        }
+        
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        /* Prompt de orientação */
+        #orientation-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
             justify-content: center;
             align-items: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .zoom-btn:active {
-            transform: scale(0.92);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        
-        .zoom-reset {
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-        }
-        
-        .zoom-level {
+            z-index: 1000;
+            color: white;
             text-align: center;
-            font-size: 0.9rem;
-            color: #2c3e50;
-            font-weight: bold;
-            margin-top: 5px;
-            background: rgba(236, 240, 241, 0.9);
-            padding: 4px 8px;
-            border-radius: 15px;
         }
         
+        .orientation-content {
+            max-width: 300px;
+            padding: 20px;
+        }
+        
+        .orientation-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: rotate 2s linear infinite;
+        }
+        
+        .orientation-arrow {
+            font-size: 3rem;
+            margin-top: 20px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Responsividade - Mobile Small (≤480px) */
         @media (max-width: 480px) {
+            .header-container {
+                height: 60px;
+                padding: 0 10px;
+            }
+            
+            .header-container h1 {
+                font-size: 1.2rem;
+            }
+            
+            .toggle-sidebar {
+                padding: 8px 12px;
+                font-size: 12px;
+                right: 10px;
+                top: 10px;
+            }
+            
+            .content-wrapper {
+                margin-top: 60px;
+            }
+            
+            .table {
+                grid-template-columns: 20px repeat(18, 35px);
+                grid-template-rows: 15px repeat(9, 35px);
+                gap: 0.8px;
+                padding: 3px;
+                padding-bottom: 60px;
+            }
             
             .element {
-                min-width: 30px;
-                min-height: 30px;
-                font-size: 0.6rem;
+                width: 35px;
+                height: 35px;
+                font-size: 0.3rem;
+            }
+            
+            .element .number {
+                font-size: 0.25rem;
+                top: 1px;
+                left: 1px;
             }
             
             .element .symbol {
-                font-size: 0.8rem;
+                font-size: 0.4rem;
             }
             
             .element .name {
-                font-size: 0.45rem;
+                font-size: 0.2rem;
             }
             
-            .element .number, .element .mass {
-                font-size: 0.45rem;
+            .element .mass {
+                font-size: 0.2rem;
+                bottom: 1px;
+                right: 1px;
             }
             
-            .modal-content {
-                width: 95%;
+            .group-label {
+                width: 35px;
+                height: 15px;
+                font-size: 0.3rem;
+                margin-top: -3px;
             }
             
-            .modal-symbol {
-                width: 60px;
-                height: 60px;
+            .period-label {
+                width: 20px;
+                height: 35px;
+                font-size: 0.3rem;
+                margin-left: -3px;
             }
             
-            .modal-symbol .symbol {
-                font-size: 1.8rem;
+            .sidebar {
+                width: 100%;
+                transform: translateX(100%);
             }
             
-            .legend-items {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
+            .sidebar.mobile-sidebar {
+                transform: translateX(100%);
             }
             
-            .legend-item span {
-                font-size: 0.7rem;
+            .sidebar.mobile-sidebar.open {
+                transform: translateX(0);
             }
             
-            .zoom-controls {
-                bottom: 15px;
-                right: 3px;
-                margin-right: 3px ;
-                gap: 7px;
-                padding: 2px;
-                padding-top: 10px;
-
+            .table-container.mobile-layout {
+                width: 100%;
+                margin-left: 0;
             }
             
-            .zoom-btn {
-                width: 45px;
-                height: 45px;
+            .bottom-panel.mobile-layout {
+                right: 0;
+                left: 0;
+                height: 50px;
+                padding: 10px;
+            }
+            
+            .visualization-container {
+                height: 200px;
+            }
+            
+            .sidebar-element {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .sidebar-element .element-symbol {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Responsividade - Mobile (≤768px) */
+        @media (max-width: 768px) {
+            .header-container {
+                height: 65px;
+                padding: 0 12px;
+            }
+            
+            .header-container h1 {
                 font-size: 1.4rem;
             }
             
-            .header-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 1.1rem;
+            .toggle-sidebar {
+                padding: 10px 14px;
+                font-size: 13px;
+                right: 12px;
+                top: 12px;
+            }
+            
+            .content-wrapper {
+                margin-top: 65px;
+            }
+            
+            .table {
+                grid-template-columns: 25px repeat(18, 45px);
+                grid-template-rows: 18px repeat(9, 45px);
+                gap: 1px;
+                padding: 4px;
+                padding-bottom: 70px;
+            }
+            
+            .element {
+                width: 45px;
+                height: 45px;
+                font-size: 0.35rem;
+            }
+            
+            .element .number {
+                font-size: 0.3rem;
+                top: 1px;
+                left: 1.5px;
+            }
+            
+            .element .symbol {
+                font-size: 0.5rem;
+            }
+            
+            .element .name {
+                font-size: 0.25rem;
+            }
+            
+            .element .mass {
+                font-size: 0.25rem;
+                bottom: 1px;
+                right: 1.5px;
+            }
+            
+            .group-label {
+                width: 45px;
+                height: 18px;
+                font-size: 0.4rem;
+                margin-top: -3px;
+            }
+            
+            .period-label {
+                width: 25px;
+                height: 45px;
+                font-size: 0.4rem;
+                margin-left: -3px;
+            }
+            
+            .sidebar {
+                width: 100%;
+                transform: translateX(100%);
+            }
+            
+            .sidebar.mobile-sidebar {
+                transform: translateX(100%);
+            }
+            
+            .sidebar.mobile-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .table-container.mobile-layout {
+                width: 100%;
+                margin-left: 0;
+            }
+            
+            .bottom-panel.mobile-layout {
+                right: 0;
+                left: 0;
+                height: 60px;
+                padding: 12px;
+            }
+            
+            .visualization-container {
+                height: 250px;
+            }
+            
+            .sidebar-element {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .sidebar-element .element-symbol {
+                font-size: 1.8rem;
             }
         }
         
-        @media screen and (orientation: portrait) {
-            .container.landscape-mode {
-                transform: rotate(90deg);
-                transform-origin: center center;
-                width: 100vh;
-                height: 100vw;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                margin-top: -50vw;
-                margin-left: -50vh;
+        /* Responsividade - Tablet (≤1024px) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .header-container {
+                height: 68px;
+                padding: 0 15px;
+            }
+            
+            .header-container h1 {
+                font-size: 1.5rem;
+            }
+            
+            .toggle-sidebar {
+                padding: 10px 15px;
+                font-size: 14px;
+                right: 15px;
+                top: 15px;
+            }
+            
+            .content-wrapper {
+                margin-top: 68px;
+            }
+            
+            .table {
+                grid-template-columns: 28px repeat(18, 52px);
+                grid-template-rows: 20px repeat(9, 52px);
+                gap: 1.2px;
+                padding: 5px;
+                padding-bottom: 80px;
+            }
+            
+            .element {
+                width: 52px;
+                height: 52px;
+            }
+            
+            .group-label {
+                width: 52px;
+                height: 20px;
+                margin-top: -3px;
+            }
+            
+            .period-label {
+                width: 28px;
+                height: 52px;
+                margin-left: -3px;
+            }
+            
+            .sidebar {
+                width: 320px;
+            }
+            
+            .table-container {
+                width: calc(100% - 320px);
+            }
+            
+            .table-container.sidebar-right {
+                margin-left: 0;
+                margin-right: 320px;
+            }
+            
+            .bottom-panel {
+                left: 320px;
+            }
+            
+            .bottom-panel.sidebar-right {
+                left: 0;
+                right: 320px;
+            }
+            
+            .visualization-container {
+                height: 280px;
             }
         }
         
-        .fullscreen-mode {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 9999 !important;
-            background: white;
+        /* Responsividade - Desktop Small (≤1440px) */
+        @media (max-width: 1440px) and (min-width: 1025px) {
+            .table {
+                grid-template-columns: 30px repeat(18, 58px);
+                grid-template-rows: 22px repeat(9, 58px);
+                gap: 1.4px;
+                padding: 5.5px;
+                padding-bottom: 95px;
+            }
+            
+            .element {
+                width: 58px;
+                height: 58px;
+            }
+            
+            .group-label {
+                width: 58px;
+                height: 22px;
+                margin-top: -3px;
+            }
+            
+            .period-label {
+                width: 30px;
+                height: 58px;
+                margin-left: -3px;
+            }
         }
         
-        .exit-fullscreen {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 10000;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: none;
+        /* Landscape específico para mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .header-container {
+                height: 50px;
+            }
+            
+            .content-wrapper {
+                margin-top: 50px;
+            }
+            
+            .table {
+                grid-template-columns: 20px repeat(18, 40px);
+                grid-template-rows: 15px repeat(9, 40px);
+                gap: 0.8px;
+                padding: 3px;
+                padding-bottom: 50px;
+            }
+            
+            .element {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .group-label {
+                width: 40px;
+                height: 15px;
+                margin-top: -3px;
+            }
+            
+            .period-label {
+                width: 20px;
+                height: 40px;
+                margin-left: -3px;
+            }
+            
+            .visualization-container {
+                height: 180px;
+            }
+            
+            .bottom-panel.mobile-layout {
+                height: 45px;
+                padding: 8px;
+            }
         }
         
-        .legend-container {
-            display: none;
+        /* Classes específicas para dispositivos */
+        .mobile-device .sidebar {
+            width: 100%;
+            z-index: 200;
+        }
+        
+        .mobile-device .table-container {
+            width: 100%;
+        }
+        
+        .tablet-device .sidebar {
+            width: 300px;
+        }
+        
+        .tablet-device .table-container {
+            width: calc(100% - 300px);
+        }
+        
+        /* Melhorias para touch */
+        @media (hover: none) and (pointer: coarse) {
+            .element:hover {
+                transform: none;
+            }
+            
+            .element:active {
+                transform: scale(1.05);
+            }
+            
+            .sidebar-element:hover {
+                transform: none;
+            }
+            
+            .sidebar-element:active {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <div id="splash-screen">
-        <h1>Tabela Periódica ⚛️</h1>
-        <p>Sugestões? Dicas de melhorias? Deixe seu feedback!</p>
-        <button id="enter-button">Explorar Tabela</button>
-        <br>
-        <br>
-        <p>QUI 2025/02N v0.1</p>
-
-
-    </div>
-    
-    <div class="container" id="main-container">
-        <div class="fullscreen-header">
-            <button class="back-button" id="back-button">← Voltar</button>
-            <h1>Tabela Periódica</h1>
-            <div class="header-buttons">
-                <button class="header-btn" id="legend-button">📋</button>
-            </div>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header-container">
+            <h1>Tabela Periódica Interativa</h1>
+            <button class="toggle-sidebar" onclick="toggleSidebar()">ℹ️ Mudar <></button>
         </div>
         
-        <div class="table-container" id="table-container">
-            <div class="periodic-table" id="periodicTable">
+        <!-- Conteúdo Principal -->
+        <div class="content-wrapper">
+            <!-- Tabela Periódica -->
+            <div class="table-container">
+                <div class="table" id="periodicTable">
+                    <!-- A tabela será gerada dinamicamente -->
+                </div>
             </div>
-        </div>
-        
-        <div class="legend-container">
-            <div class="legend">
-                <h3>Categorias</h3>
-                <div class="legend-items">
-                    <div class="legend-item">
-                        <div class="legend-color alkali-metal"></div>
-                        <span>Metais Alcalinos</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color alkaline-earth-metal"></div>
-                        <span>Alcalino-terrosos</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color transition-metal"></div>
-                        <span>Metais de Transição</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color post-transition-metal"></div>
-                        <span>Metais Pós-transição</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color metalloid"></div>
-                        <span>Metaloides</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color nonmetal"></div>
-                        <span>Não Metais</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color halogen"></div>
-                        <span>Halogênios</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color noble-gas"></div>
-                        <span>Gases Nobres</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color lanthanide"></div>
-                        <span>Lantanídeos</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color actinide"></div>
-                        <span>Actinídeos</span>
+            
+            <!-- Sidebar de Informações -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Informações do Elemento</h3>
+                    <button class="close-sidebar" onclick="toggleSidebar()">×</button>
+                </div>
+                <div class="sidebar-content" id="elementInfo">
+                    <div class="element-info">
+                        <!-- Elemento visual da sidebar -->
+                        <div class="sidebar-element" id="sidebarElement">
+                            <div class="element-number" id="sidebarElementNumber">1</div>
+                            <div class="element-symbol" id="sidebarElementSymbol">H</div>
+                            <div class="element-name" id="sidebarElementName">Hidrogênio</div>
+                            <div class="element-mass" id="sidebarElementMass">1.008</div>
+                        </div>
+                        
+                        <div class="category-info">
+                            <div class="color-dot" id="categoryColor"></div>
+                            <span id="categoryName"></span>
+                        </div>
+                        
+                        <!-- Visualizações -->
+                        <div class="visualization-container">
+                            <div class="visualization-tabs">
+                                <button class="tab-button active" onclick="switchTab('2d')">Modelo 2D</button>
+                                <button class="tab-button" onclick="switchTab('3d')">Modelo 3D</button>
+                            </div>
+                            <div class="tab-content active" id="tab2d">
+                                <div id="atom-container-2d" style="width: 100%; height: 100%;"></div>
+                            </div>
+                            <div class="tab-content" id="tab3d">
+                                <div id="atom3dContainer" style="width: 100%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Propriedades -->
+                        <ul class="properties-list" id="propertiesList">
+                            <!-- Propriedades serão preenchidas dinamicamente -->
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="modal" id="elementModal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <div class="modal-header">
-                    <div class="modal-symbol" id="modalSymbol">
-                        <div class="number" id="modalNumber">1</div>
-                        <div class="symbol" id="modalSymbolText">H</div>
-                        <div class="mass" id="modalMass">1.008</div>
-                    </div>
-                    <div class="modal-title">
-                        <h2 id="modalName">Hidrogênio</h2>
-                        <div class="number" id="modalFullNumber">Número Atômico: 1</div>
-                    </div>
-                </div>
-                <div class="modal-properties">
-                    <div class="property">
-                        <strong>Categoria:</strong>
-                        <span id="modalCategory">Não metal</span>
-                    </div>
-                    <div class="property">
-                        <strong>Configuração Eletrônica:</strong>
-                        <span id="modalConfig">1s¹</span>
-                    </div>
-                    <div class="property">
-                        <strong>Estado (25°C):</strong>
-                        <span id="modalState">Gás</span>
-                    </div>
-                    <div class="property">
-                        <strong>Densidade:</strong>
-                        <span id="modalDensity">0.08988 g/L</span>
-                    </div>
-                    <div class="property">
-                        <strong>Ponto de Fusão:</strong>
-                        <span id="modalMelting">-259.14°C</span>
-                    </div>
-                    <div class="property">
-                        <strong>Ponto de Ebulição:</strong>
-                        <span id="modalBoiling">-252.87°C</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Modal para Categorias -->
-        <div class="modal legend-modal" id="legendModal">
-            <div class="modal-content">
-                <span class="close" id="close-legend">&times;</span>
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <h2>Categorias dos Elementos</h2>
-                    </div>
-                </div>
-                <div class="legend-items" id="legend-items-container">
-                    <div class="legend-item" data-category="alkali-metal">
-                        <div class="legend-color alkali-metal"></div>
-                        <span>Metais Alcalinos</span>
-                    </div>
-                    <div class="legend-item" data-category="alkaline-earth-metal">
-                        <div class="legend-color alkaline-earth-metal"></div>
-                        <span>Alcalino-terrosos</span>
-                    </div>
-                    <div class="legend-item" data-category="transition-metal">
-                        <div class="legend-color transition-metal"></div>
-                        <span>Metais de Transição</span>
-                    </div>
-                    <div class="legend-item" data-category="post-transition-metal">
-                        <div class="legend-color post-transition-metal"></div>
-                        <span>Metais Pós-transição</span>
-                    </div>
-                    <div class="legend-item" data-category="metalloid">
-                        <div class="legend-color metalloid"></div>
-                        <span>Metaloides</span>
-                    </div>
-                    <div class="legend-item" data-category="nonmetal">
-                        <div class="legend-color nonmetal"></div>
-                        <span>Não Metais</span>
-                    </div>
-                    <div class="legend-item" data-category="halogen">
-                        <div class="legend-color halogen"></div>
-                        <span>Halogênios</span>
-                    </div>
-                    <div class="legend-item" data-category="noble-gas">
-                        <div class="legend-color noble-gas"></div>
-                        <span>Gases Nobres</span>
-                    </div>
-                    <div class="legend-item" data-category="lanthanide">
-                        <div class="legend-color lanthanide"></div>
-                        <span>Lantanídeos</span>
-                    </div>
-                    <div class="legend-item" data-category="actinide">
-                        <div class="legend-color actinide"></div>
-                        <span>Actinídeos</span>
-                    </div>
-                </div>
+        <!-- Painel Inferior -->
+        <div class="bottom-panel">
+            <div class="legend" id="legend">
+                <!-- Legenda será gerada dinamicamente -->
             </div>
         </div>
     </div>
-    
-    <div class="zoom-controls" id="zoom-controls" style="display: none;">
-        <button class="zoom-btn" id="zoom-in">+</button>
-        <button class="zoom-btn zoom-reset" id="zoom-reset">⟳</button>
-        <button class="zoom-btn" id="zoom-out">-</button>
-        <div class="zoom-level" id="zoom-level">100%</div>
-    </div>
-    
-    <button class="exit-fullscreen" id="exit-fullscreen">✕</button>
 
+    <!-- Scripts -->
+    <script src="elements-data.js"></script>
+    <script src="atom-visualizer-2d.js"></script>
+    
     <script>
-
+        // Variáveis globais
+        let currentElement = null;
+        let atomVisualizer2D = null;
+        let scene3D = null;
+        let renderer3D = null;
+        let camera3D = null;
+        let controls3D = null;
         
+        // Variáveis de responsividade
+        let isMobile = false;
+        let isLandscape = false;
+        let isTablet = false;
+        let currentBreakpoint = 'desktop';
+        
+        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos da UI
-            const splashScreen = document.getElementById('splash-screen');
-            const enterButton = document.getElementById('enter-button');
-            const mainContainer = document.getElementById('main-container');
-            const backButton = document.getElementById('back-button');
-            const periodicTable = document.getElementById('periodicTable');
-            const tableContainer = document.getElementById('table-container');
-            const modal = document.getElementById('elementModal');
-            const legendModal = document.getElementById('legendModal');
-            const legendButton = document.getElementById('legend-button');
-            const closeBtn = document.querySelector('.close');
-            const closeLegendBtn = document.getElementById('close-legend');
-            const exitFullscreenBtn = document.getElementById('exit-fullscreen');
-            const zoomControls = document.getElementById('zoom-controls');
-            const zoomInBtn = document.getElementById('zoom-in');
-            const zoomOutBtn = document.getElementById('zoom-out');
-            const zoomResetBtn = document.getElementById('zoom-reset');
-            const zoomLevel = document.getElementById('zoom-level');
-            const legendItems = document.querySelectorAll('.legend-item[data-category]');
+            initializeResponsive();
+            generatePeriodicTable();
+            generateLegend();
+            initializeVisualizers();
+            setupEventListeners();
+        });
+        
+        // Inicializar sistema responsivo
+        function initializeResponsive() {
+            detectDevice();
+            updateLayout();
             
-            let isLandscapeMode = false;
-            let isFullscreen = false;
-            let scale = 1;
-            let lastScale = 1;
-            let initialDistance = null;
-            let currentHighlightedCategory = null;
-            let highlightTimeout = null;
+            // Adicionar listener para mudanças de orientação
+            window.addEventListener('orientationchange', function() {
+                setTimeout(() => {
+                    detectDevice();
+                    updateLayout();
+                    handleOrientationChange();
+                }, 100);
+            });
             
-            initializeApp();
+            // Adicionar listener para redimensionamento
+            window.addEventListener('resize', debounce(() => {
+                detectDevice();
+                updateLayout();
+            }, 250));
+        }
+        
+        // Detectar tipo de dispositivo
+        function detectDevice() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const userAgent = navigator.userAgent.toLowerCase();
             
-            function initializeApp() {
-                enterButton.addEventListener('click', enterTable);
-                backButton.addEventListener('click', exitTable);
-                closeBtn.addEventListener('click', closeModal);
-                closeLegendBtn.addEventListener('click', closeLegendModal);
-                exitFullscreenBtn.addEventListener('click', exitFullscreen);
-                legendButton.addEventListener('click', showLegendModal);
+            // Detectar mobile
+            isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent) || 
+                      width <= 768;
+            
+            // Detectar tablet
+            isTablet = /ipad|android(?!.*mobile)|tablet/i.test(userAgent) || 
+                      (width > 768 && width <= 1024);
+            
+            // Detectar orientação
+            isLandscape = width > height;
+            
+            // Determinar breakpoint
+            if (width <= 480) {
+                currentBreakpoint = 'mobile-small';
+            } else if (width <= 768) {
+                currentBreakpoint = 'mobile';
+            } else if (width <= 1024) {
+                currentBreakpoint = 'tablet';
+            } else if (width <= 1440) {
+                currentBreakpoint = 'desktop-small';
+                } else {
+                currentBreakpoint = 'desktop';
+            }
+            
+            // Adicionar classes ao body
+            document.body.className = document.body.className.replace(/device-\w+/g, '');
+            document.body.classList.add(`device-${currentBreakpoint}`);
+            if (isMobile) document.body.classList.add('mobile-device');
+            if (isTablet) document.body.classList.add('tablet-device');
+            if (isLandscape) document.body.classList.add('landscape');
+            if (!isLandscape) document.body.classList.add('portrait');
+        }
+        
+        // Atualizar layout baseado no dispositivo
+        function updateLayout() {
+            const sidebar = document.getElementById('sidebar');
+            const tableContainer = document.querySelector('.table-container');
+            const bottomPanel = document.querySelector('.bottom-panel');
+            
+            if (isMobile) {
+                // Mobile: sidebar sempre oculta por padrão
+                sidebar.classList.add('collapsed');
+                sidebar.classList.add('mobile-sidebar');
+                tableContainer.classList.add('mobile-layout');
+                bottomPanel.classList.add('mobile-layout');
                 
-                // Eventos de zoom
-                zoomInBtn.addEventListener('click', zoomIn);
-                zoomOutBtn.addEventListener('click', zoomOut);
-                zoomResetBtn.addEventListener('click', resetZoom);
-                
-                legendItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        const category = this.getAttribute('data-category');
-                        highlightCategory(category);
-                    });
-                });
-                
-                tableContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
-                tableContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
-                tableContainer.addEventListener('touchend', handleTouchEnd);
-                
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) closeModal();
-                });
-                
-                legendModal.addEventListener('click', function(e) {
-                    if (e.target === legendModal) closeLegendModal();
-                });
-                
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        if (isFullscreen) {
-                            exitFullscreen();
-                        } else if (legendModal.style.display === 'block') {
-                            closeLegendModal();
-                        } else {
-                            closeModal();
+                // Forçar orientação landscape em mobile
+                if (!isLandscape) {
+                    showOrientationPrompt();
+                }
+            } else {
+                // Desktop/Tablet: remover classes mobile e garantir posição inicial à esquerda
+                sidebar.classList.remove('mobile-sidebar');
+                sidebar.classList.remove('right-position');
+                tableContainer.classList.remove('mobile-layout');
+                tableContainer.classList.remove('sidebar-right');
+                bottomPanel.classList.remove('mobile-layout');
+                bottomPanel.classList.remove('sidebar-right');
+            }
+        }
+        
+        // Lidar com mudança de orientação
+        function handleOrientationChange() {
+            if (isMobile) {
+                if (isLandscape) {
+                    hideOrientationPrompt();
+                    // Ajustar visualizações 3D para landscape
+                    if (renderer3D && camera3D) {
+                        const container = document.getElementById('atom3dContainer');
+                        if (container) {
+                            const rect = container.getBoundingClientRect();
+                            camera3D.aspect = rect.width / rect.height;
+                            camera3D.updateProjectionMatrix();
+                            renderer3D.setSize(rect.width, rect.height);
                         }
                     }
-                });
-                
-                setTimeout(createPeriodicTable, 100);
-            }
-            
-            function enterTable() {
-                splashScreen.style.opacity = '0';
-                setTimeout(() => {
-                    splashScreen.style.display = 'none';
-                    mainContainer.style.display = 'flex';
-                    zoomControls.style.display = 'flex';
-                    activateFullscreen();
-                    
-                    if (window.innerHeight > window.innerWidth) {
-                        enableLandscapeMode();
-                    }
-                }, 500);
-            }
-            
-            function exitTable() {
-                exitFullscreen();
-                mainContainer.style.display = 'none';
-                zoomControls.style.display = 'none';
-                if (isLandscapeMode) {
-                    disableLandscapeMode();
+                } else {
+                    showOrientationPrompt();
                 }
-                splashScreen.style.display = 'flex';
-                setTimeout(() => {
-                    splashScreen.style.opacity = '1';
-                }, 50);
             }
-            
-            function activateFullscreen() {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen();
-                } else if (elem.webkitRequestFullscreen) { /* Safari */
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { /* IE11 */
-                    elem.msRequestFullscreen();
-                }
-                
-                document.body.classList.add('fullscreen-mode');
-                exitFullscreenBtn.style.display = 'block';
-                isFullscreen = true;
+        }
+        
+        // Mostrar prompt de orientação
+        function showOrientationPrompt() {
+            let prompt = document.getElementById('orientation-prompt');
+            if (!prompt) {
+                prompt = document.createElement('div');
+                prompt.id = 'orientation-prompt';
+                prompt.innerHTML = `
+                    <div class="orientation-content">
+                        <div class="orientation-icon">📱</div>
+                        <h3>Gire seu dispositivo</h3>
+                        <p>Para uma melhor experiência, use o modo paisagem (landscape)</p>
+                        <div class="orientation-arrow">↻</div>
+                    </div>
+                `;
+                document.body.appendChild(prompt);
             }
-            
-            function exitFullscreen() {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                    document.msExitFullscreen();
-                }
-
-                document.body.classList.remove('fullscreen-mode');
-                exitFullscreenBtn.style.display = 'none';
-                isFullscreen = false;
-
-                // Voltar ao menu inicial
-                mainContainer.style.display = 'none';
-                zoomControls.style.display = 'none';
-                if (isLandscapeMode) disableLandscapeMode();
-                splashScreen.style.display = 'flex';
-                setTimeout(() => { splashScreen.style.opacity = '1'; }, 50);
+            prompt.style.display = 'flex';
+        }
+        
+        // Esconder prompt de orientação
+        function hideOrientationPrompt() {
+            const prompt = document.getElementById('orientation-prompt');
+            if (prompt) {
+                prompt.style.display = 'none';
             }
-
-            
-            function enableLandscapeMode() {
-                if (window.innerHeight > window.innerWidth) {
-                    mainContainer.classList.add('landscape-mode');
-                    isLandscapeMode = true;
+        }
+        
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Listener para mudanças de visibilidade (fullscreen)
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && isMobile) {
                     setTimeout(() => {
-                        periodicTable.scrollIntoView({behavior: 'smooth'});
-                    }, 300);
+                        detectDevice();
+                        updateLayout();
+                    }, 100);
+                        }
+                    });
                 }
-            }
-            
-            function disableLandscapeMode() {
-                mainContainer.classList.remove('landscape-mode');
-                isLandscapeMode = false;
-            }
-            
-            // Funções de Zoom
-            function zoomIn() {
-                scale = Math.min(scale + 0.1, 2);
-                applyZoom();
-            }
-            
-            function zoomOut() {
-                scale = Math.max(scale - 0.1, 1); // Mínimo de 100% (1.0)
-                applyZoom();
-            }
-            
-            function resetZoom() {
-                scale = 1;
-                applyZoom();
-            }
-            
-            function applyZoom() {
-                periodicTable.style.transform = `scale(${scale})`;
-                zoomLevel.textContent = `${Math.round(scale * 100)}%`;
                 
-                // Desabilitar botão de zoom out se estiver no mínimo (100%)
-                zoomOutBtn.disabled = scale <= 1;
-                zoomOutBtn.style.opacity = scale <= 1 ? 0.5 : 1;
-            }
+        // Gerar tabela periódica
+        function generatePeriodicTable() {
+            const table = document.getElementById('periodicTable');
+            table.innerHTML = '';
             
-            // Gestos para zoom com dois dedos (pinch)
-            function handleTouchStart(e) {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    initialDistance = getDistance(e.touches[0], e.touches[1]);
-                    lastScale = scale;
-                }
-            }
+            // Usar grid com rótulos para todas as resoluções
+            // 10 linhas (1 header + 7 períodos + 2 séries)
+            // Usar grid sem espaços vazios entre indicadores e elementos
+            const grid = Array(10).fill().map(() => Array(19).fill(null));
             
-            function handleTouchMove(e) {
-                if (e.touches.length === 2) {
-                    e.preventDefault();
-                    const currentDistance = getDistance(e.touches[0], e.touches[1]);
-                    if (initialDistance !== null) {
-                        scale = Math.max(1, Math.min(2, lastScale * (currentDistance / initialDistance))); // Mínimo de 100% (1.0)
-                        applyZoom();
+            // Mapear elementos para o grid
+            elementsData.forEach(element => {
+                if (element.row && element.col) {
+                    if (element.row <= 7) {
+                        grid[element.row][element.col] = element;
+                    } else if (element.row === 8) {
+                        // Lantanídeos na linha 8 (começando da coluna 4)
+                        const lanthanideCol = element.number - 57 + 4; // La=57 começa na coluna 4
+                        if (lanthanideCol <= 18) {
+                            grid[8][lanthanideCol] = element;
+                        }
+                    } else if (element.row === 9) {
+                        // Actinídeos na linha 9 (começando da coluna 4)
+                        const actinideCol = element.number - 89 + 4; // Ac=89 começa na coluna 4
+                        if (actinideCol <= 18) {
+                            grid[9][actinideCol] = element;
+                        }
                     }
                 }
-            }
+            });
             
-            function handleTouchEnd() {
-                initialDistance = null;
-            }
+            const fragment = document.createDocumentFragment();
+
+            // Definir grupos e suas nomenclaturas
+            const groupLabels = [
+                '', // Espaço vazio no canto
+                { new: '1', old: '1A' },    // Grupo 1
+                { new: '2', old: '2A' },    // Grupo 2
+                { new: '3', old: '3B' },    // Grupo 3
+                { new: '4', old: '4B' },    // Grupo 4
+                { new: '5', old: '5B' },    // Grupo 5
+                { new: '6', old: '6B' },    // Grupo 6
+                { new: '7', old: '7B' },    // Grupo 7
+                { new: '8', old: '8B' },    // Grupo 8
+                { new: '9', old: '8B' },    // Grupo 9 (também 8B)
+                { new: '10', old: '8B' },   // Grupo 10 (também 8B)
+                { new: '11', old: '1B' },   // Grupo 11
+                { new: '12', old: '2B' },   // Grupo 12
+                { new: '13', old: '3A' },   // Grupo 13
+                { new: '14', old: '4A' },   // Grupo 14
+                { new: '15', old: '5A' },   // Grupo 15
+                { new: '16', old: '6A' },   // Grupo 16
+                { new: '17', old: '7A' },   // Grupo 17
+                { new: '18', old: '8A' }    // Grupo 18
+            ];
             
-            function getDistance(touch1, touch2) {
-                const dx = touch1.clientX - touch2.clientX;
-                const dy = touch1.clientY - touch2.clientY;
-                return Math.sqrt(dx * dx + dy * dy);
-            }
-            
-            function createPeriodicTable() {
-                periodicTable.innerHTML = '';
-                const grid = Array(9).fill().map(() => Array(18).fill(null));
-                
-                elementsData.forEach(element => {
-                    if (element.row && element.col) {
-                        grid[element.row - 1][element.col - 1] = element;
+            // Criar grid com legendas (7 períodos + 2 séries)
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 19; col++) {
+                    let elementDiv = document.createElement('div');
+                    
+                    // Primeira linha - legendas de grupos
+                    if (row === 0) {
+                        if (col === 0) {
+                            elementDiv.className = 'empty-space';
+                        } else {
+                            elementDiv.className = 'group-label';
+                            const groupInfo = groupLabels[col];
+                            elementDiv.innerHTML = `
+                                <div>${groupInfo.new}</div>
+                                <div class="old-notation">${groupInfo.old}</div>
+                            `;
+                        }
                     }
-                });
-                
-                const fragment = document.createDocumentFragment();
-                
-                for (let row = 0; row < 9; row++) {
-                    for (let col = 0; col < 18; col++) {
+                    // Primeira coluna - legendas de períodos
+                    else if (col === 0) {
+                        elementDiv.className = 'period-label';
+                        if (row <= 7) {
+                            elementDiv.innerHTML = `<div class="period-number">${row}</div>`;
+                        } else if (row === 8) {
+                            elementDiv.innerHTML = `<div class="period-number">Ln</div>`;
+                        } else if (row === 9) {
+                            elementDiv.innerHTML = `<div class="period-number">An</div>`;
+                        }
+                    }
+                    // Células dos elementos
+                    else {
                         const element = grid[row][col];
-                        const elementDiv = document.createElement('div');
                         
                         if (element) {
                             elementDiv.className = `element ${element.category}`;
@@ -1030,146 +1342,546 @@
                                 <div class="mass">${element.mass}</div>
                             `;
                             
-                            elementDiv.addEventListener('click', () => showElementDetails(element));
+                            elementDiv.addEventListener('click', () => selectElement(element));
                         } else {
                             elementDiv.className = 'element empty-space';
                             
-                            if (row === 5 && col === 2) {
+                            // Indicadores de lantanídeos e actinídeos
+                            if (row === 6 && col === 3) {
                                 elementDiv.innerHTML = '<div class="symbol">57-71</div><div class="name">Lantanídeos</div>';
                                 elementDiv.className = 'element lanthanide-indicator';
-                            } else if (row === 6 && col === 2) {
+                                // Remover espaços vazios entre o indicador e os elementos lantanídeos
+                                if (col === 3) {
+                                    for (let i = 4; i <= 18; i++) {
+                                        if (!grid[row][i]) {
+                                            grid[row][i] = 'occupied'; // Marcar como ocupado para evitar espaços vazios
+                                        }
+                                    }
+                                }
+                            } else if (row === 7 && col === 3) {
                                 elementDiv.innerHTML = '<div class="symbol">89-103</div><div class="name">Actinídeos</div>';
                                 elementDiv.className = 'element actinide-indicator';
+                                // Remover espaços vazios entre o indicador e os elementos actinídeos
+                                if (col === 3) {
+                                    for (let i = 4; i <= 18; i++) {
+                                        if (!grid[row][i]) {
+                                            grid[row][i] = 'occupied'; // Marcar como ocupado para evitar espaços vazios
+                                        }
+                                    }
+                                }
+                            } else if (grid[row][col] === 'occupied') {
+                                // Não criar elemento para células marcadas como ocupadas
+                                continue;
                             }
                         }
-                        
-                        fragment.appendChild(elementDiv);
                     }
+                    
+                    fragment.appendChild(elementDiv);
                 }
-                
-                periodicTable.appendChild(fragment);
             }
             
-            function showElementDetails(element) {
-                document.getElementById('modalSymbolText').textContent = element.symbol;
-                document.getElementById('modalSymbol').className = `modal-symbol ${element.category}`;
-                document.getElementById('modalNumber').textContent = element.number;
-                document.getElementById('modalMass').textContent = element.mass;
-                document.getElementById('modalName').textContent = element.name;
-                document.getElementById('modalFullNumber').textContent = `Número Atômico: ${element.number}`;
-                document.getElementById('modalCategory').textContent = categoryNames[element.category];
-                document.getElementById('modalConfig').textContent = element.config;
-                document.getElementById('modalState').textContent = element.state;
-                document.getElementById('modalDensity').textContent = element.density;
-                document.getElementById('modalMelting').textContent = element.melting;
-                document.getElementById('modalBoiling').textContent = element.boiling;
-                
-                modal.style.display = 'block';
-                setTimeout(() => {
-                    modal.classList.add('show');
-                }, 10);
-                
-                document.body.style.overflow = 'hidden';
+            table.appendChild(fragment);
+        }
+        
+        
+        // Obter classe CSS da categoria
+        function getCategoryClass(category) {
+            const categoryMap = {
+                'alkali-metal': 'alkali-metal',
+                'alkaline-earth-metal': 'alkaline-earth-metal',
+                'transition-metal': 'transition-metal',
+                'post-transition-metal': 'post-transition-metal',
+                'metalloid': 'metalloid',
+                'nonmetal': 'nonmetal',
+                'halogen': 'halogen',
+                'noble-gas': 'noble-gas',
+                'lanthanide': 'lanthanide',
+                'actinide': 'actinide'
+            };
+            return categoryMap[category] || 'nonmetal';
+        }
+        
+        // Selecionar elemento
+        function selectElement(element) {
+            currentElement = element;
+            updateElementInfo(element);
+            updateVisualizations(element);
+            
+            // Destacar elemento selecionado
+            document.querySelectorAll('.element').forEach(el => el.classList.remove('highlight'));
+            const elementInTable = document.querySelector(`[data-category="${element.category}"]`);
+            if (elementInTable && elementInTable.textContent.includes(element.symbol)) {
+                elementInTable.classList.add('highlight');
+            }
+        }
+        
+        // Atualizar informações do elemento
+        function updateElementInfo(element) {
+            // Atualizar elemento visual da sidebar
+            const sidebarElement = document.getElementById('sidebarElement');
+            sidebarElement.className = `sidebar-element ${element.category}`;
+            
+            document.getElementById('sidebarElementNumber').textContent = element.number;
+            document.getElementById('sidebarElementSymbol').textContent = element.symbol;
+            document.getElementById('sidebarElementName').textContent = element.name;
+            document.getElementById('sidebarElementMass').textContent = element.mass;
+            
+            document.getElementById('categoryName').textContent = getCategoryName(element.category);
+            
+            const colorDot = document.getElementById('categoryColor');
+            colorDot.className = `color-dot ${getCategoryClass(element.category)}`;
+            
+            // Atualizar propriedades
+            const propertiesList = document.getElementById('propertiesList');
+            propertiesList.innerHTML = `
+                <li><span class="property-label">Massa atômica:</span><span class="property-value">${element.mass} u</span></li>
+                <li><span class="property-label">Configuração eletrônica:</span><span class="property-value">${element.config}</span></li>
+                <li><span class="property-label">Estado:</span><span class="property-value">${element.state}</span></li>
+                <li><span class="property-label">Densidade:</span><span class="property-value">${element.density}</span></li>
+                <li><span class="property-label">Ponto de fusão:</span><span class="property-value">${element.melting}</span></li>
+                <li><span class="property-label">Ponto de ebulição:</span><span class="property-value">${element.boiling}</span></li>
+                <li><span class="property-label">Raio atômico:</span><span class="property-value">${element.atomicRadius}</span></li>
+                <li><span class="property-label">Eletronegatividade:</span><span class="property-value">${element.electronegativity}</span></li>
+                <li><span class="property-label">Energia de ionização:</span><span class="property-value">${element.ionizationEnergy}</span></li>
+                <li><span class="property-label">NOX comum:</span><span class="property-value">${element.commonNox}</span></li>
+                <li><span class="property-label">Ano de descoberta:</span><span class="property-value">${element.discoveryYear}</span></li>
+            `;
+        }
+        
+        // Obter nome da categoria
+        function getCategoryName(category) {
+            const categoryNames = {
+                'alkali-metal': 'Metal Alcalino',
+                'alkaline-earth-metal': 'Metal Alcalino-terroso',
+                'transition-metal': 'Metal de Transição',
+                'post-transition-metal': 'Metal Pós-transição',
+                'metalloid': 'Metaloide',
+                'nonmetal': 'Não Metal',
+                'halogen': 'Halogênio',
+                'noble-gas': 'Gás Nobre',
+                'lanthanide': 'Lantanídeo',
+                'actinide': 'Actinídeo'
+            };
+            return categoryNames[category] || 'Desconhecido';
+        }
+        
+        // Gerar legenda
+        function generateLegend() {
+            const legend = document.getElementById('legend');
+            const categories = [
+                { class: 'alkali-metal', name: 'Metal Alcalino' },
+                { class: 'alkaline-earth-metal', name: 'Metal Alcalino-terroso' },
+                { class: 'transition-metal', name: 'Metal de Transição' },
+                { class: 'post-transition-metal', name: 'Metal Pós-transição' },
+                { class: 'metalloid', name: 'Metaloide' },
+                { class: 'nonmetal', name: 'Não Metal' },
+                { class: 'halogen', name: 'Halogênio' },
+                { class: 'noble-gas', name: 'Gás Nobre' },
+                { class: 'lanthanide', name: 'Lantanídeo' },
+                { class: 'actinide', name: 'Actinídeo' }
+            ];
+            
+            categories.forEach(category => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = `
+                    <div class="legend-color ${category.class}"></div>
+                    <span>${category.name}</span>
+                `;
+                legend.appendChild(item);
+            });
+        }
+        
+        // Inicializar visualizadores
+        function initializeVisualizers() {
+            // Inicializar visualizador 3D
+            initialize3DVisualizer();
+        }
+        
+        // Inicializar visualizador 3D
+        function initialize3DVisualizer() {
+            const container = document.getElementById('atom3dContainer');
+            
+            // Limpar container
+            container.innerHTML = '';
+            
+            // Obter dimensões do container
+            const rect = container.getBoundingClientRect();
+            const width = rect.width || 280;
+            const height = rect.height || 260;
+            
+            // Cena
+            scene3D = new THREE.Scene();
+            scene3D.background = new THREE.Color(0xf0f2f5);
+            
+            // Câmera responsiva
+            const fov = isMobile ? 75 : 60; // FOV maior para mobile
+            camera3D = new THREE.PerspectiveCamera(fov, width/height, 0.1, 1000);
+            camera3D.position.set(0, 0, isMobile ? 8 : 6); // Mais distante no mobile
+            camera3D.lookAt(0, 0, 0);
+            
+            // Renderer responsivo
+            renderer3D = new THREE.WebGLRenderer({ 
+                antialias: !isMobile, // Desabilitar antialiasing no mobile para performance
+                alpha: true,
+                powerPreference: isMobile ? "low-power" : "high-performance"
+            });
+            renderer3D.setSize(width, height);
+            renderer3D.setPixelRatio(isMobile ? 1 : window.devicePixelRatio); // Pixel ratio fixo no mobile
+            renderer3D.shadowMap.enabled = !isMobile; // Desabilitar sombras no mobile
+            if (!isMobile) {
+                renderer3D.shadowMap.type = THREE.PCFSoftShadowMap;
+            }
+            container.appendChild(renderer3D.domElement);
+            
+            // Controles responsivos
+            controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
+            controls3D.enableDamping = true;
+            controls3D.dampingFactor = isMobile ? 0.1 : 0.08;
+            controls3D.autoRotate = false;
+            controls3D.enableZoom = true;
+            controls3D.enablePan = false;
+            controls3D.minDistance = isMobile ? 4 : 3;
+            controls3D.maxDistance = isMobile ? 20 : 15;
+            controls3D.maxPolarAngle = Math.PI;
+            controls3D.minPolarAngle = 0;
+            
+            // Configurações específicas para touch
+            if (isMobile) {
+                controls3D.touches = {
+                    ONE: THREE.TOUCH.ROTATE,
+                    TWO: THREE.TOUCH.DOLLY_PAN
+                };
+                controls3D.enableRotate = true;
+                controls3D.rotateSpeed = 0.5;
+                controls3D.zoomSpeed = 0.5;
             }
             
-            function showLegendModal() {
-                legendModal.style.display = 'block';
-                setTimeout(() => {
-                    legendModal.classList.add('show');
-                }, 10);
-                
-                document.body.style.overflow = 'hidden';
-            }
+            // Iluminação melhorada
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene3D.add(ambientLight);
             
-            function closeModal() {
-                modal.classList.remove('show');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }, 300);
-            }
+            const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight1.position.set(5, 5, 5);
+            directionalLight1.castShadow = true;
+            directionalLight1.shadow.mapSize.width = 2048;
+            directionalLight1.shadow.mapSize.height = 2048;
+            scene3D.add(directionalLight1);
             
-            function closeLegendModal() {
-                legendModal.classList.remove('show');
-                setTimeout(() => {
-                    legendModal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }, 300);
-                
-                // Remover destaque ao fechar o modal
-                clearTimeout(highlightTimeout);
-                highlightTimeout = setTimeout(() => {
-                    removeHighlight();
-                }, 2000);
-            }
+            const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+            directionalLight2.position.set(-5, -5, -5);
+            scene3D.add(directionalLight2);
             
-            // Função para destacar elementos de uma categoria
-            function highlightCategory(category) {
-                // Remover destaque anterior
-                removeHighlight();
-                
-                legendItems.forEach(item => {
-                    if (item.getAttribute('data-category') === category) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-                
-                const elements = document.querySelectorAll(`.element[data-category="${category}"]`);
-                elements.forEach(element => {
-                    element.classList.add('highlighted');
-                });
-                
-                if (elements.length > 0) {
-                    elements[0].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
-                }
-                
-                currentHighlightedCategory = category;
-            }
+            const pointLight = new THREE.PointLight(0xffffff, 0.5, 100);
+            pointLight.position.set(0, 0, 10);
+            scene3D.add(pointLight);
             
-            function removeHighlight() {
-                const highlightedElements = document.querySelectorAll('.element.highlighted');
-                highlightedElements.forEach(element => {
-                    element.classList.remove('highlighted');
-                });
-                
-                legendItems.forEach(item => {
-                    item.classList.remove('active');
-                });
-                
-                currentHighlightedCategory = null;
-            }
+            // Adicionar plano de fundo sutil
+            const backgroundGeometry = new THREE.SphereGeometry(20, 32, 32);
+            const backgroundMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xf8f9fa, 
+                transparent: true, 
+                opacity: 0.1,
+                side: THREE.BackSide
+            });
+            const background = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+            scene3D.add(background);
             
-            window.addEventListener('orientationchange', function() {
-                if (mainContainer.style.display !== 'none') {
-                    if (window.orientation === 90 || window.orientation === -90) {
-                        disableLandscapeMode();
-                    } else {
-                        enableLandscapeMode();
-                    }
+            // Animação
+            animate3D();
+        }
+        
+        // Atualizar visualizações
+        function updateVisualizations(element) {
+            create2DAtom(element);
+            update3DVisualization(element);
+        }
+        
+        // Atualizar visualização 3D
+        function update3DVisualization(element) {
+            if (!scene3D) return;
+            
+            // Limpar objetos existentes
+            scene3D.children.slice().forEach(child => {
+                if (child.type !== 'AmbientLight' && child.type !== 'DirectionalLight') {
+                    scene3D.remove(child);
                 }
             });
             
-            document.addEventListener('fullscreenchange', handleFullscreenChange);
-            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-            document.addEventListener('msfullscreenchange', handleFullscreenChange);
+            // Criar modelo atômico 3D simplificado
+            createAtomicModel3D(element);
+        }
+        
+        // Criar modelo atômico 3D
+        function createAtomicModel3D(element) {
+            // Criar grupo principal para o átomo
+            const atomGroup = new THREE.Group();
+            scene3D.add(atomGroup);
             
-            function handleFullscreenChange() {
-                const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+            // Núcleo com tamanho proporcional e cor baseada na categoria
+            const nucleusSize = Math.max(0.2, Math.min(0.4, 0.25 + element.number / 300));
+            const nucleusGeometry = new THREE.SphereGeometry(nucleusSize, 32, 32);
+            const nucleusMaterial = new THREE.MeshPhongMaterial({ 
+                color: getElementColor3D(element.category),
+                shininess: 100,
+                emissive: new THREE.Color(getElementColor3D(element.category)).multiplyScalar(0.1),
+                specular: new THREE.Color(0xffffff)
+            });
+            const nucleus = new THREE.Mesh(nucleusGeometry, nucleusMaterial);
+            atomGroup.add(nucleus);
+            
+            // Adicionar efeito de pulso ao núcleo
+            nucleus.userData.pulsePhase = 0;
+            
+            // Criar camadas eletrônicas baseadas na configuração real
+            const electronShells = getElectronShells(element.number);
+            const electronObjects = [];
+            
+            electronShells.forEach((shell, shellIndex) => {
+                if (shell.electrons === 0) return;
                 
-                if (!fullscreenElement) {
-                    document.body.classList.remove('fullscreen-mode');
-                    exitFullscreenBtn.style.display = 'none';
-                    isFullscreen = false;
+                const radius = 0.8 + shellIndex * 0.6;
+                const electrons = shell.electrons;
+                
+                // Criar órbita visual
+                const orbitGeometry = new THREE.RingGeometry(radius - 0.05, radius + 0.05, 64);
+                const orbitMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x333333, 
+                    transparent: true, 
+                    opacity: 0.3,
+                    side: THREE.DoubleSide
+                });
+                const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                orbit.rotation.x = Math.PI / 2;
+                atomGroup.add(orbit);
+                
+                // Distribuir elétrons na órbita
+                for (let i = 0; i < electrons; i++) {
+                    const angle = (i / electrons) * Math.PI * 2;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
                     
-                    exitTable();
+                    const electronGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+                    const electronMaterial = new THREE.MeshPhongMaterial({ 
+                        color: 0x4A90E2,
+                        emissive: new THREE.Color(0x4A90E2).multiplyScalar(0.2),
+                        shininess: 50
+                    });
+                    const electron = new THREE.Mesh(electronGeometry, electronMaterial);
+                    
+                    electron.position.set(x, 0, z);
+                    electron.userData.originalAngle = angle;
+                    electron.userData.radius = radius;
+                    electron.userData.shellIndex = shellIndex;
+                    electron.userData.rotationSpeed = 1.1 - shellIndex * 0.2;
+                    
+                    atomGroup.add(electron);
+                    electronObjects.push(electron);
+                }
+            });
+            
+            // Armazenar referências para animação
+            atomGroup.userData.electrons = electronObjects;
+            atomGroup.userData.nucleus = nucleus;
+            
+            // Adicionar rotação automática
+            atomGroup.userData.autoRotate = true;
+            atomGroup.userData.rotationSpeed = 0.3;
+        }
+        
+        // Função para obter cores dos elementos por categoria
+        function getElementColor3D(category) {
+            const colors = {
+                'alkali-metal': 0xf1b200,
+                'alkaline-earth-metal': 0xeada00,
+                'transition-metal': 0xeb8e8e,
+                'post-transition-metal': 0xa2c7d3,
+                'metalloid': 0x4db6ac,
+                'nonmetal': 0xa1d344,
+                'halogen': 0x70cbeb,
+                'noble-gas': 0x74b9ff,
+                'lanthanide': 0x90e3e9,
+                'actinide': 0xdcadd6
+            };
+            return colors[category] || 0x888888;
+        }
+        
+        // Função para calcular camadas eletrônicas baseada no número atômico
+        function getElectronShells(atomicNumber) {
+            const shells = [
+                { name: 'K', max: 2, electrons: 0 },
+                { name: 'L', max: 8, electrons: 0 },
+                { name: 'M', max: 18, electrons: 0 },
+                { name: 'N', max: 32, electrons: 0 },
+                { name: 'O', max: 32, electrons: 0 },
+                { name: 'P', max: 18, electrons: 0 },
+                { name: 'Q', max: 8, electrons: 0 }
+            ];
+            
+            let remaining = atomicNumber;
+            for (let i = 0; i < shells.length && remaining > 0; i++) {
+                const electrons = Math.min(remaining, shells[i].max);
+                shells[i].electrons = electrons;
+                remaining -= electrons;
+            }
+            
+            return shells;
+        }
+        
+        // Animação 3D
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            
+            if (controls3D) {
+                controls3D.update();
+            }
+            
+            // Animar átomos na cena
+            if (scene3D) {
+                scene3D.children.forEach(child => {
+                    if (child.userData && child.userData.electrons) {
+                        animateAtom(child);
+                    }
+                });
+            }
+            
+            if (renderer3D && scene3D && camera3D) {
+                renderer3D.render(scene3D, camera3D);
+            }
+        }
+        
+        // Animar átomo individual
+        function animateAtom(atomGroup) {
+            const time = Date.now() * 0.001;
+            
+            // Rotação do grupo principal
+            if (atomGroup.userData.autoRotate) {
+                atomGroup.rotation.y += atomGroup.userData.rotationSpeed * 0.01;
+            }
+            
+            // Animar elétrons
+            if (atomGroup.userData.electrons) {
+                atomGroup.userData.electrons.forEach(electron => {
+                    const speed = electron.userData.rotationSpeed;
+                    const radius = electron.userData.radius;
+                    const newAngle = electron.userData.originalAngle + time * speed;
+                    
+                    electron.position.x = Math.cos(newAngle) * radius;
+                    electron.position.z = Math.sin(newAngle) * radius;
+                    
+                    // Efeito de pulsação sutil
+                    const pulse = 1 + Math.sin(time * 2 + electron.userData.shellIndex) * 0.1;
+                    electron.scale.setScalar(pulse);
+                });
+            }
+            
+            // Efeito de pulso no núcleo
+            if (atomGroup.userData.nucleus) {
+                const nucleus = atomGroup.userData.nucleus;
+                nucleus.userData.pulsePhase += 0.05;
+                const pulse = 1 + Math.sin(nucleus.userData.pulsePhase) * 0.05;
+                nucleus.scale.setScalar(pulse);
+            }
+        }
+        
+        // Alternar abas
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab${tab}`).classList.add('active');
+            
+            // Se mudou para a aba 2D e há um elemento selecionado, recriar a visualização
+            if (tab === '2d' && currentElement) {
+                setTimeout(() => {
+                    create2DAtom(currentElement);
+                }, 50);
+            }
+            
+            // Se mudou para a aba 3D, garantir que está inicializada
+            if (tab === '3d') {
+                if (!scene3D || !renderer3D) {
+                    setTimeout(() => {
+                        initialize3DVisualizer();
+                        if (currentElement) {
+                            update3DVisualization(currentElement);
+                        }
+                    }, 50);
+                } else if (currentElement) {
+                    setTimeout(() => {
+                        update3DVisualization(currentElement);
+                    }, 50);
                 }
             }
-        });
-
+        }
         
+        // Alternar sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const tableContainer = document.querySelector('.table-container');
+            const bottomPanel = document.querySelector('.bottom-panel');
+            
+            if (isMobile) {
+                // Comportamento mobile: apenas abrir/fechar
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                    sidebar.classList.add('open');
+                } else {
+                    sidebar.classList.add('collapsed');
+                    sidebar.classList.remove('open');
+                }
+            } else {
+                // Comportamento desktop/tablet: alternar posição
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebar.classList.remove('collapsed');
+                    return;
+                }
+                
+                if (sidebar.classList.contains('right-position')) {
+                    // Mover para a esquerda (posição padrão)
+                    sidebar.classList.remove('right-position');
+                    tableContainer.classList.remove('sidebar-right');
+                    bottomPanel.classList.remove('sidebar-right');
+                } else {
+                    // Mover para a direita
+                    sidebar.classList.add('right-position');
+                    tableContainer.classList.add('sidebar-right');
+                    bottomPanel.classList.add('sidebar-right');
+                }
+            }
+        }
+        
+        // Função para criar visualização 2D (baseada no index.html)
+        function create2DAtom(element) {
+            const container = document.getElementById('atom-container-2d');
+            
+            // Destruir visualizador anterior se existir
+            if (atomVisualizer2D) {
+                atomVisualizer2D.destroy();
+                atomVisualizer2D = null;
+            }
+            
+            // Verificar se o container existe
+            if (!container) {
+                console.error("Container atom-container-2d não encontrado");
+                return;
+            }
+            
+            try {
+                // Criar novo visualizador
+                atomVisualizer2D = new AtomVisualizer2D('atom-container-2d');
+                atomVisualizer2D.setElement(element.number);
+            } catch (error) {
+                console.error("Erro ao criar visualizador 2D:", error);
+            }
+        }
+        
+        // Selecionar elemento inicial
+        setTimeout(() => {
+            const firstElement = elementsData[0]; // Hidrogênio
+            selectElement(firstElement);
+        }, 1000);
     </script>
-    <script src="elements-data.js"></script>
 </body>
 </html>
