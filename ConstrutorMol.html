@@ -319,7 +319,7 @@
                 
                 <div class="flex items-center space-x-4">
                                     <div id="status" class="text-sm font-medium text-gray-700 bg-blue-50 px-3 py-1 rounded-full">
-                    <i class="fas fa-mouse-pointer mr-1"></i> Modo Seleção
+                    <i class="fas fa-mouse-pointer mr-1"></i>Seleção
                 </div>
                 <div id="measurement" class="text-sm font-medium text-white bg-blue-600 px-3 py-1 rounded-full hidden">
                     <i class="fas fa-ruler mr-1"></i> Distância: <span id="distanceValue">0.00</span> Å
@@ -1190,9 +1190,9 @@
                 // Update status
                 const toolNames = {
                     select: 'Seleção',
-                    atom: 'Adicionar Átomo',
-                    move: 'Mover Átomo',
-                    bond: 'Adicionar Ligação',
+                    atom: 'Adicionar',
+                    move: 'Mover',
+                    bond: 'Adicionar',
                     erase: 'Apagar',
                     rotate: 'Rotacionar',
                     measure: 'Medir'
@@ -1208,7 +1208,7 @@
                     measure: 'fa-ruler'
                 };
                 
-                statusDisplay.innerHTML = `<i class="fas ${toolIcons[tool]} mr-1"></i> ${toolNames[tool]} Mode`;
+                statusDisplay.innerHTML = `<i class="fas ${toolIcons[tool]} mr-1"></i> ${toolNames[tool]} `;
                 
                 // Configurar controles com base na ferramenta selecionada
                 if (tool === 'rotate') {
